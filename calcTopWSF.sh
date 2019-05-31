@@ -1,25 +1,30 @@
 #!/bin/bash
 ## arguments object = "T" or "W"
 object=$1
+syst="tot"
 
 declare -a algos
 declare -a ptranges
 
 if [ ${object} == "T" ];
 then
-    algos=("sdtau32" "sdtau32btag" "ecftoptag" "hotvr" "best" "imagetop" "imagetopmd" "deepak8" "deepak8md")
-    ptranges=("low" "lowmed" "med" "medhi")
+    #algos=("sdtau32" "sdtau32btag" "ecftoptag" "hotvr" "best" "imagetop" "imagetopmd" "deepak8" "deepak8md")
+    #ptranges=("low" "lowmed" "med" "medhi")
+    algos=("hotvr")
+    ptranges=("med")
 elif [ ${object} == "W" ];
 then
-    algos=("sdtau21" "sdn2" "sdn2ddt" "best" "deepak8" "deepak8md")
-    ptranges=("low" "lowmed" "med")
+    #algos=("sdtau21" "sdn2" "sdn2ddt" "best" "deepak8" "deepak8md")
+    #ptranges=("low" "lowmed" "med")
+    algos=("sdn2")
+    ptranges=("low")
 fi
 
 ## loop over the algos
 for algo in "${algos[@]}";
 do
 
-    workdir=${object}"_"${algo}
+    workdir=${object}"_"${algo}"_"${syst}
     mkdir ${workdir}
 
     ## loop over the working points
@@ -29,11 +34,20 @@ do
         ## loop over the pt bins
 	for ptrange in "${ptranges[@]}";
 	do
-		
+
+            ## get nominal sf
+	    #echo "get nominal sf"
+	    #getsf=$(echo 'getsf.C("'${object}'","'${ptrange}'","'${wp}'","'${algo}'")')
+	    #readsf=$(root -l -q ${getsf})
+	    #root -l -q ${getsf} 
+	    #readsf=( $(<readsf.txt) )
+	    #echo "print sf"
+	    #echo ${readsf}
+	    		
 	    ##make templates
 	    echo "make templates"
-	    cmdpass=$(echo 'makeSFTemplates.C("'${object}'","'${algo}'","'${wp}'","'${ptrange}'",true)')
-	    cmdfail=$(echo 'makeSFTemplates.C("'${object}'","'${algo}'","'${wp}'","'${ptrange}'",false)')
+	    cmdpass=$(echo 'makeSFTemplates.C("'${object}'","'${algo}'","'${wp}'","'${ptrange}'","'${syst}'",true)')
+	    cmdfail=$(echo 'makeSFTemplates.C("'${object}'","'${algo}'","'${wp}'","'${ptrange}'","'${syst}'",false)')
 	    root -l -q ${cmdpass}
 	    root -l -q ${cmdfail}
  

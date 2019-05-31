@@ -28,13 +28,21 @@ void makeSFDatacard(std::string inputname) {
   std::cout << "# on each process and bin\n";
   std::cout << "bin             pass   pass   pass       fail   fail   fail\n";
   std::cout << "process         catp2   catp3   catp1      catp2   catp3   catp1\n";  
-  std::cout << "process            -1     2      3         -1     2       3\n";
+  std::cout << "process            -1     -2      3         -1     -2       3\n";
   std::cout << "rate            " 
 	    << h_catp2_pass->Integral(1,h_catp2_pass->GetNbinsX()) << " " << h_catp3_pass->Integral(1,h_catp3_pass->GetNbinsX()) << " " << h_catp1_pass->Integral(1,h_catp1_pass->GetNbinsX()) << " "
 	    << h_catp2_fail->Integral(1,h_catp2_fail->GetNbinsX()) << " " << h_catp3_fail->Integral(1,h_catp3_fail->GetNbinsX()) << " " << h_catp1_fail->Integral(1,h_catp1_fail->GetNbinsX()) << "\n";
   std::cout << "------------\n";
   std::cout << "lumi    lnN    1.025  1.025  1.025  1.025  1.025  1.025\n";
-  std::cout << "pu     shape     1      1      1      1      1      1  \n";
+  std::cout << "pu          shape     1      1      1      1      1      1  \n";
+  std::cout << "jer         shape     1      1      1      1      1      1  \n";
+  std::cout << "jes         shape     1      1      1      1      1      1  \n";
+  std::cout << "met         shape     1      1      1      1      1      1  \n";
+  //  std::cout << "herwig      shape     1      1      1      1      1      1  \n";
+  std::cout << "lhescalemuf shape     1      1      1      1      1      1  \n";
+  std::cout << "lhescalemur shape     1      1      1      1      1      1  \n";
+  std::cout << "lhepdf      shape     1      1      1      1      1      1  \n";
   std::cout << "*  autoMCStats  0\n";
+  //std::cout << "dummy    lnN    1.001  1.001  1.001  1.001  1.001  1.001\n";
 
 }

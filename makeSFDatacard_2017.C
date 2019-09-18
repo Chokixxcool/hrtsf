@@ -1,4 +1,4 @@
-void makeSFDatacard(std::string inputname) {
+void makeSFDatacard_2017(std::string inputname) {
 
   TFile *fpass = TFile::Open((TString)inputname+"_pass.root","READONLY");
   TFile *ffail = TFile::Open((TString)inputname+"_fail.root","READONLY");
@@ -38,11 +38,11 @@ void makeSFDatacard(std::string inputname) {
   std::cout << "jer         shape     1      1      1      1      1      1  \n";
   std::cout << "jes         shape     1      1      1      1      1      1  \n";
   std::cout << "met         shape     1      1      1      1      1      1  \n";
-  std::cout << "herwig      shape     1      1      1      1      1      1  \n";
+  //std::cout << "herwig      shape     1      1      1      1      1      1  \n";
   std::cout << "lhescalemuf shape     1      1      1      1      1      1  \n";
   std::cout << "lhescalemur shape     1      1      1      1      1      1  \n";
   std::cout << "lhepdf      shape     1      1      1      1      1      1  \n";
   std::cout << "*  autoMCStats  0\n";
   //std::cout << "dummy    lnN    1.001  1.001  1.001  1.001  1.001  1.001\n";
-
+ 
 }

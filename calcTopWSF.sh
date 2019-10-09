@@ -24,11 +24,11 @@ then
     #algos=("sdtau32" "sdtau32btag" "ecftoptag" "hotvr" "best" "imagetop" "imagetopmd" "deepak8" "deepak8md")
     ptranges=("low" "lowmed" "med" "medhi")
     algos=("deepak8" "deepak8md" "deepak8_raw" "deepak8md_raw")
-    #algos=("deepak8")
-    #ptranges=("medhi")
+    #algos=("deepak8_raw")
+    #ptranges=("lowmed")
 
-    mist_rates=("0p1" "0p5" "1p0" "5p0")
-    #mist_rates=("0p5")
+    #mist_rates=("0p1" "0p5" "1p0" "5p0")
+    mist_rates=("0p5")
     
     if [ ${year} == 2016 ];
     then
@@ -101,12 +101,6 @@ do
                 WP_Top_raw=${WPs_mist_rate[2]}
                 WP_Top_rawMD=${WPs_mist_rate[3]}
                 
-                #echo ${WPs_mist_rate[@]}             
-
-                #echo ${WP_Top_binarized} 
-                #echo ${WP_Top_binarizedMD}
-                #echo ${WP_Top_raw} 
-                #echo ${WP_Top_rawMD} 
 
         elif  [ ${mistRate} == "0p5" ];
         then
@@ -164,8 +158,9 @@ do
 				
 		    ##make templates
 		    echo "make templates"
-		    cmdpass=$(echo 'makeSFTemplates.C("'${object}'","'${algo}'","'${wp}'","'${ptrange}'","'${syst}'",true,"'${mistRate}'",'${WP_Top_binarized}','${WP_Top_binarizedMD}','${WP_Top_raw}','${WP_Top_rawMD}','${year}',"'${workdir0}'")') 
-                    cmdfail=$(echo 'makeSFTemplates.C("'${object}'","'${algo}'","'${wp}'","'${ptrange}'","'${syst}'",false,"'${mistRate}'",'${WP_Top_binarized}','${WP_Top_binarizedMD}','${WP_Top_raw}','${WP_Top_rawMD}','${year}',"'${workdir0}'")')              
+		    cmdpass=$(echo 'makeSFTemplates.C("'${object}'","'${algo}'","'${wp}'","'${ptrange}'","'${syst}'",true,"'${mistRate}'",'${WP_Top_binarized}','${WP_Top_binarizedMD}','${WP_Top_raw}','${WP_Top_rawMD}','${year}',"'${workdir0}'")')
+                    cmdfail=$(echo 'makeSFTemplates.C("'${object}'","'${algo}'","'${wp}'","'${ptrange}'","'${syst}'",false,"'${mistRate}'",'${WP_Top_binarized}','${WP_Top_binarizedMD}','${WP_Top_raw}','${WP_Top_rawMD}','${year}',"'${workdir0}'")')
+               
 		    root -l -q ${cmdpass}
 		    root -l -q ${cmdfail}
 	 
@@ -174,25 +169,13 @@ do
 		    echo " "
 		    cd ${workdir}
 		    inputname=${object}"_"${algo}"_"${wp}"_"${ptrange}
-                    if [ ${year} == 2016 ];
-                    then
-			cp ../../makeSFDatacard.C .
-                    elif [ ${year} == 2017 ] || [ ${year} == 2018 ];
-                    then
-                         cp ../../makeSFDatacard_2017.C .
-                    fi
+
+                    cp ../../makeSFDatacard.C .
+
                     cp ../../combineTool.py .
-                    cp ../../plotImpacts.py .  
-
-                    if [ ${year} == 2016 ];
-                    then
-		         cmdmakedatacard=$(echo 'makeSFDatacard.C("'${inputname}'")')
-                    elif [ ${year} == 2017 ] || [ ${year} == 2018 ];
-                    then 
-                         cmdmakedatacard=$(echo 'makeSFDatacard_2017.C("'${inputname}'")')
-                    fi
- 
-
+                    cp ../../plotImpacts.py . 
+                           
+                    cmdmakedatacard=$(echo 'makeSFDatacard.C("'${inputname}'",'${year}')')
 		    root -l -q ${cmdmakedatacard} > sf.txt
 		    sed -n -i '3,$ p' sf.txt
 		    
@@ -208,10 +191,10 @@ do
 		    mv sf.root sf"_"${inputname}".root"
 		    echo "Do the MultiDimFit"
 		    combine -M MultiDimFit -m 125 sf"_"${inputname}.root --algo=singles --robustFit=1 --cminDefaultMinimizerTolerance 5.
-  		    #combine -M MultiDimFit -m 125 sf"_"${inputname}.root --algo=singles --robustFit 1 --cminDefaultMinimizerStrategy 0 	
+  		    #combine -M MultiDimFit -m 125 sf"_"${inputname}.root --algo=singles --robustFit 1 --cminDefaultMinimizerStrategy 0
 		    echo "Run the FitDiagnostics"    
 		    combine -M FitDiagnostics -m 125 sf"_"${inputname}.root --saveShapes --saveWithUncertainties --robustFit=1 --cminDefaultMinimizerTolerance 5.
-	 	    #combine -M FitDiagnostics -m 125 sf"_"${inputname}.root --saveShapes --saveWithUncertainties --robustFit 1 --cminDefaultMinimizerStrategy 0 
+	 	    #combine -M FitDiagnostics -m 125 sf"_"${inputname}.root --saveShapes --saveWithUncertainties --robustFit 1 --cminDefaultMinimizerStrategy 0
 		    mv fitDiagnostics.root sf"_"fitDiagnostics"_"${inputname}".root"
                     
                     python combineTool.py -M Impacts -d sf"_"${inputname}.root -m 125 --doInitialFit --robustFit 1

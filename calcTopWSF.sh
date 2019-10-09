@@ -1,5 +1,5 @@
 #!/bin/bash
-## arguments object = "T" or "W", year = 2016 or 2017 , folder_name
+## arguments object = "T" or "W", year = 2016 or 2017 or 2018, folder_name
 object=$1
 year=$2
 workdir0=$3
@@ -42,6 +42,12 @@ then
             WPs_mist_rate_0p5=(0.894945 0.57765 0.497896 0.12387) # 0: ak8_1_DeepAK8_TvsQCD, 1: ak8_1_DeepAK8MD_TvsQCD, 2: ak8_1_DeepAK8_Top, 3: ak8_1_DeepAK8MD_Top
             WPs_mist_rate_1p0=(0.74501 0.391455 0.310047 0.0737485) # 0: ak8_1_DeepAK8_TvsQCD, 1: ak8_1_DeepAK8MD_TvsQCD, 2: ak8_1_DeepAK8_Top, 3: ak8_1_DeepAK8MD_Top
             WPs_mist_rate_5p0=(0.0931942 0.0542414 0.0275957 0.0138089) # 0: ak8_1_DeepAK8_TvsQCD, 1: ak8_1_DeepAK8MD_TvsQCD, 2: ak8_1_DeepAK8_Top, 3: ak8_1_DeepAK8MD_Top    
+    elif [ ${year} == 2018 ];
+    then
+            WPs_mist_rate_0p1=(0.986217 0.844952 0.831612 0.333162) # 0: ak8_1_DeepAK8_TvsQCD, 1: ak8_1_DeepAK8MD_TvsQCD, 2: ak8_1_DeepAK8_Top, 3: ak8_1_DeepAK8MD_Top
+            WPs_mist_rate_0p5=(0.898277 0.559342 0.523792 0.126772 ) # 0: ak8_1_DeepAK8_TvsQCD, 1: ak8_1_DeepAK8MD_TvsQCD, 2: ak8_1_DeepAK8_Top, 3: ak8_1_DeepAK8MD_Top
+            WPs_mist_rate_1p0=(0.75146 0.36306 0.334927 0.0732553) # 0: ak8_1_DeepAK8_TvsQCD, 1: ak8_1_DeepAK8MD_TvsQCD, 2: ak8_1_DeepAK8_Top, 3: ak8_1_DeepAK8MD_Top
+            WPs_mist_rate_5p0=(0.102426 0.045428 0.0342551 0.0130718) # 0: ak8_1_DeepAK8_TvsQCD, 1: ak8_1_DeepAK8MD_TvsQCD, 2: ak8_1_DeepAK8_Top, 3: ak8_1_DeepAK8MD_Top    
     fi
 
     #echo ${WPs_mist_rate_0p1[1]}
@@ -68,6 +74,12 @@ then
             WPs_mist_rate_0p5=(0.991407 0.884424 0.851776 0.616956) # 0: ak8_1_DeepAK8_WvsQCD, 1: ak8_1_DeepAK8MD_WvsQCD, 2: ak8_1_DeepAK8_W, 3: ak8_1_DeepAK8MD_W
             WPs_mist_rate_1p0=(0.981299 0.802331 0.801854 0.5366) # 0: ak8_1_DeepAK8_WvsQCD, 1: ak8_1_DeepAK8MD_WvsQCD, 2: ak8_1_DeepAK8_W, 3: ak8_1_DeepAK8MD_W
             WPs_mist_rate_5p0=(0.778869 0.313254 0.436723 0.220494) # 0: ak8_1_DeepAK8_WvsQCD, 1: ak8_1_DeepAK8MD_WvsQCD, 2: ak8_1_DeepAK8_W, 3: ak8_1_DeepAK8MD_W
+    elif [ ${year} == 2018 ];
+    then
+            WPs_mist_rate_0p1=(0.997201 0.952358 0.894613 0.71532) # 0: ak8_1_DeepAK8_WvsQCD, 1: ak8_1_DeepAK8MD_WvsQCD, 2: ak8_1_DeepAK8_W, 3: ak8_1_DeepAK8MD_W
+            WPs_mist_rate_0p5=(0.987834 0.859153 0.829094 0.591239) # 0: ak8_1_DeepAK8_WvsQCD, 1: ak8_1_DeepAK8MD_WvsQCD, 2: ak8_1_DeepAK8_W, 3: ak8_1_DeepAK8MD_W
+            WPs_mist_rate_1p0=(0.973452 0.766602 0.772662 0.507302) # 0: ak8_1_DeepAK8_WvsQCD, 1: ak8_1_DeepAK8MD_WvsQCD, 2: ak8_1_DeepAK8_W, 3: ak8_1_DeepAK8MD_W
+            WPs_mist_rate_5p0=(0.706981 0.274176 0.378693 0.197519) # 0: ak8_1_DeepAK8_WvsQCD, 1: ak8_1_DeepAK8MD_WvsQCD, 2: ak8_1_DeepAK8_W, 3: ak8_1_DeepAK8MD_W
     fi
 fi
 
@@ -152,8 +164,8 @@ do
 				
 		    ##make templates
 		    echo "make templates"
-		    cmdpass=$(echo 'makeSFTemplates_V2.C("'${object}'","'${algo}'","'${wp}'","'${ptrange}'","'${syst}'",true,"'${mistRate}'",'${WP_Top_binarized}','${WP_Top_binarizedMD}','${WP_Top_raw}','${WP_Top_rawMD}','${year}',"'${workdir0}'")')                		    cmdfail=$(echo 'makeSFTemplates_V2.C("'${object}'","'${algo}'","'${wp}'","'${ptrange}'","'${syst}'",false,"'${mistRate}'",'${WP_Top_binarized}','${WP_Top_binarizedMD}','${WP_Top_raw}','${WP_Top_rawMD}','${year}',"'${workdir0}'")')
-               
+		    cmdpass=$(echo 'makeSFTemplates.C("'${object}'","'${algo}'","'${wp}'","'${ptrange}'","'${syst}'",true,"'${mistRate}'",'${WP_Top_binarized}','${WP_Top_binarizedMD}','${WP_Top_raw}','${WP_Top_rawMD}','${year}',"'${workdir0}'")') 
+                    cmdfail=$(echo 'makeSFTemplates.C("'${object}'","'${algo}'","'${wp}'","'${ptrange}'","'${syst}'",false,"'${mistRate}'",'${WP_Top_binarized}','${WP_Top_binarizedMD}','${WP_Top_raw}','${WP_Top_rawMD}','${year}',"'${workdir0}'")')              
 		    root -l -q ${cmdpass}
 		    root -l -q ${cmdfail}
 	 
@@ -165,7 +177,7 @@ do
                     if [ ${year} == 2016 ];
                     then
 			cp ../../makeSFDatacard.C .
-                    elif [ ${year} == 2017 ];
+                    elif [ ${year} == 2017 ] || [ ${year} == 2018 ];
                     then
                          cp ../../makeSFDatacard_2017.C .
                     fi
@@ -175,7 +187,7 @@ do
                     if [ ${year} == 2016 ];
                     then
 		         cmdmakedatacard=$(echo 'makeSFDatacard.C("'${inputname}'")')
-                    elif [ ${year} == 2017 ];
+                    elif [ ${year} == 2017 ] || [ ${year} == 2018 ];
                     then 
                          cmdmakedatacard=$(echo 'makeSFDatacard_2017.C("'${inputname}'")')
                     fi
@@ -196,8 +208,10 @@ do
 		    mv sf.root sf"_"${inputname}".root"
 		    echo "Do the MultiDimFit"
 		    combine -M MultiDimFit -m 125 sf"_"${inputname}.root --algo=singles --robustFit=1 --cminDefaultMinimizerTolerance 5.
+  		    #combine -M MultiDimFit -m 125 sf"_"${inputname}.root --algo=singles --robustFit 1 --cminDefaultMinimizerStrategy 0 	
 		    echo "Run the FitDiagnostics"    
 		    combine -M FitDiagnostics -m 125 sf"_"${inputname}.root --saveShapes --saveWithUncertainties --robustFit=1 --cminDefaultMinimizerTolerance 5.
+	 	    #combine -M FitDiagnostics -m 125 sf"_"${inputname}.root --saveShapes --saveWithUncertainties --robustFit 1 --cminDefaultMinimizerStrategy 0 
 		    mv fitDiagnostics.root sf"_"fitDiagnostics"_"${inputname}".root"
                     
                     python combineTool.py -M Impacts -d sf"_"${inputname}.root -m 125 --doInitialFit --robustFit 1

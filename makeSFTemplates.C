@@ -11,6 +11,9 @@
 #include "TVectorF.h"
 #include <cstdlib>
 #include <math.h>
+#include <string>
+#include <cstring>
+#include <TArray.h>
 
 void makeHistoHerwig(TString name_, TString path_, TString wgt_, std::vector<TString> cuts_, TString c_jet_, TString sys_, TFile *f_);
 void makeHistoLHEPDF(TString name_, TString path_, TString wgt_, std::vector<TString> cuts_, TString c_jet_, TString sys_, TString var_, TFile *f_);
@@ -19,7 +22,7 @@ TH1D *create1Dhisto(TString sample, TTree *tree,TString intLumi,TString cuts,TSt
 		    bool useLog,int color, int style,TString name,bool norm,bool data);
 void setTDRStyle();
 
-void makeSFTemplates(TString object, TString algo, TString wp, TString ptrange, TString syst, bool pass) {
+void makeSFTemplates(TString object, TString algo, TString wp, TString ptrange, TString syst, bool pass, TString mistRate, float WP_Top_binarized, float WP_Top_binarizedMD, float WP_Top_raw, float WP_Top_rawMD, int year, TString workdir) {
 
   TString passstr = "pass"; if (pass) { passstr = "pass"; } else { passstr = "fail"; }
   TString name = object+"_"+algo+"_"+wp+"_"+ptrange+"_"+passstr;
@@ -31,19 +34,37 @@ void makeSFTemplates(TString object, TString algo, TString wp, TString ptrange, 
   gStyle->SetPalette(1);
   TH1::SetDefaultSumw2(kTRUE);
 
+  float intLumi;
+ 
+  if (year == 2016){
+       intLumi = 36.8;
+  }
+  else if(year == 2017){
+       intLumi = 41.53;
+  }
+  else if(year == 2018){
+       intLumi = 59.74;
+  }
 
-  float intLumi     = 36.8;
   ostringstream tmpLumi;
   tmpLumi << intLumi;
   TString lumi = tmpLumi.str();
 
 
   // baseline selection
-  TString c_base = "(n_ak8>=1 && n_ca15>=1)";
+  TString c_base;
+  if (year == 2016){    
+       c_base = "(n_ak8>=1 && n_ca15>=1)";
+  }
+  else if (year == 2017 || year == 2018){
+       c_base = "(n_ak8>=1)";
+  }
+
 
   // selection on algo
   TString c_algo_wp;
   TString c_jet, c_r;
+  
   if (algo == "sdtau32") { 
     c_jet = "ak8"; c_r = "0.8";
     if (wp == "JMAR") { c_algo_wp = "((1-"+c_jet+"_1_tau3/"+c_jet+"_1_tau2)>0.4422)"; }
@@ -102,26 +123,48 @@ void makeSFTemplates(TString object, TString algo, TString wp, TString ptrange, 
 
   if (algo == "deepak8") { 
     c_jet = "ak8"; c_r = "0.8";
-    if (wp == "JMAR" && object=="T") { c_algo_wp = "("+c_jet+"_1_DeepAK8_"+(TString)object+"vsQCD>0.9868)"; }
-    if (wp == "JMAR" && object=="W") { c_algo_wp = "("+c_jet+"_1_DeepAK8_"+(TString)object+"vsQCD>0.9819)"; }
+    //if (wp == "JMAR" && object=="T") { c_algo_wp = "("+c_jet+"_1_DeepAK8_"+(TString)object+"vsQCD>0.852861)"; }
+    if (wp == "JMAR" && object=="T") { c_algo_wp = "("+c_jet+"_1_DeepAK8_"+(TString)object+"vsQCD>"+to_string(WP_Top_binarized)+")"; }
+    if (wp == "JMAR" && object=="W") { c_algo_wp = "("+c_jet+"_1_DeepAK8_"+(TString)object+"vsQCD>"+to_string(WP_Top_binarized)+")"; }
     if (wp == "L")    { c_algo_wp = "("+c_jet+"_1_DeepAK8_"+(TString)object+"vsQCD>0.1883)"; }
     if (wp == "M")    { c_algo_wp = "("+c_jet+"_1_DeepAK8_"+(TString)object+"vsQCD>0.8511)"; }
     if (wp == "T")    { c_algo_wp = "("+c_jet+"_1_DeepAK8_"+(TString)object+"vsQCD>0.9377)"; }
     if (wp == "VT")   { c_algo_wp = "("+c_jet+"_1_DeepAK8_"+(TString)object+"vsQCD>0.9897)"; }
   }
 
-  if (algo == "deepak8md") { 
+  if (algo == "deepak8md") {
     c_jet = "ak8"; c_r = "0.8";
-    if (wp == "JMAR" && object=="T") { c_algo_wp = "("+c_jet+"_1_DeepAK8MD_"+(TString)object+"vsQCD>0.7462)"; }
-    if (wp == "JMAR" && object=="W") { c_algo_wp = "("+c_jet+"_1_DeepAK8MD_"+(TString)object+"vsQCD>0.6777)"; }
+    //if (wp == "JMAR" && object=="T") { c_algo_wp = "("+c_jet+"_1_DeepAK8MD_"+(TString)object+"vsQCD>0.436951)"; }
+    if (wp == "JMAR" && object=="T") { c_algo_wp = "("+c_jet+"_1_DeepAK8MD_"+(TString)object+"vsQCD>"+to_string(WP_Top_binarizedMD)+")"; }
+    if (wp == "JMAR" && object=="W") { c_algo_wp = "("+c_jet+"_1_DeepAK8MD_"+(TString)object+"vsQCD>"+to_string(WP_Top_binarizedMD)+")"; }
     if (wp == "L")    { c_algo_wp = "("+c_jet+"_1_DeepAK8MD_"+(TString)object+"vsQCD>0.1883)"; }
     if (wp == "M")    { c_algo_wp = "("+c_jet+"_1_DeepAK8MD_"+(TString)object+"vsQCD>0.8511)"; }
     if (wp == "T")    { c_algo_wp = "("+c_jet+"_1_DeepAK8MD_"+(TString)object+"vsQCD>0.9377)"; }
     if (wp == "VT")   { c_algo_wp = "("+c_jet+"_1_DeepAK8MD_"+(TString)object+"vsQCD>0.9897)"; }
   }
 
+  //
+  if (algo == "deepak8_raw"){
+     c_jet = "ak8"; c_r = "0.8";
+     //if (wp == "JMAR" && object=="T") { c_algo_wp = "("+c_jet+"_1_DeepAK8_Top > 0.4)"; }
+     if (wp == "JMAR" && object=="T") { c_algo_wp = "("+c_jet+"_1_DeepAK8_Top >"+to_string(WP_Top_raw)+")"; }
+     if (wp == "JMAR" && object=="W") { c_algo_wp = "("+c_jet+"_1_DeepAK8_W >"+to_string(WP_Top_raw)+")"; }
+
+  }
+
+  if (algo == "deepak8md_raw"){
+     c_jet = "ak8"; c_r = "0.8";
+     //if (wp == "JMAR" && object=="T") { c_algo_wp = "("+c_jet+"_1_DeepAK8MD_Top > 0.0138089)"; }
+     if (wp == "JMAR" && object=="T") { c_algo_wp = "("+c_jet+"_1_DeepAK8MD_Top > "+to_string(WP_Top_rawMD)+")"; }
+     if (wp == "JMAR" && object=="W") { c_algo_wp = "("+c_jet+"_1_DeepAK8MD_W > "+to_string(WP_Top_rawMD)+")"; }
+
+  }
+
+  /////////////////
+
+
   // mass selection
-  TString c_mass = "("+c_jet+"_1_mass>50. && "+c_jet+"_1_mass<300.)"; 
+  TString c_mass = "("+c_jet+"_1_mass>50. && "+c_jet+"_1_mass<250.)"; 
   
   // pt range
   TString c_ptrange;
@@ -140,8 +183,8 @@ void makeSFTemplates(TString object, TString algo, TString wp, TString ptrange, 
   if (pass) { c_algo_wp = "("+c_algo_wp+")";  }
   else      { c_algo_wp = "!("+c_algo_wp+")"; }
 
-  // mtaching definition
-  TString c_p3 = "( ("+c_jet+"_1_dr_fj_top_wqmax<("+c_r+"-0.2)) && ("+c_jet+"_1_dr_fj_top_b<("+c_r+"-0.2)) )";
+  // matching definition
+  TString c_p3 = "( ("+c_jet+"_1_dr_fj_top_wqmax<("+c_r+")) && ("+c_jet+"_1_dr_fj_top_b<("+c_r+")) )";
   TString c_p2 = "( (!"+c_p3+") && ("+c_jet+"_1_dr_fj_top_wqmax<"+c_r+") && ("+c_jet+"_1_dr_fj_top_b>"+c_r+") )";
   TString c_p1 = "(!("+c_p3+" || "+c_p2+"))";
   //TString c_p3 = "("+c_jet+"_1_isFullyMerged)"; // && ak8_1_topSize>-1. && ak8_1_topSize<0.8 
@@ -163,27 +206,40 @@ void makeSFTemplates(TString object, TString algo, TString wp, TString ptrange, 
   leg_sample.push_back("Data");
 
 
-  TString path = "/eos/uscms/store/group/lpcjme/noreplica/NanoHRT/Trees/Apr08/muon/";
-  TFile *f_mc = TFile::Open(path+"/mc_nom/sm.root" , "READONLY" );
+  //TString path = "/eos/uscms/store/group/lpcjme/noreplica/NanoHRT/Trees/Apr08/muon/";
+  TString path; 
+  if(year==2016){
+      path = "/eos/uscms/store/user/pakontax/2016/";
+  }
+  else if(year==2017){
+      path = "/eos/uscms/store/user/pakontax/29July/";
+  }  
+  else if(year==2018){
+      //path = "/eos/uscms/store/user/pakontax/2018_Samples_From_Sicheng_For_Copy_V2/";
+      path = "/eos/uscms/store/user/pakontax/3Oct_For_Copy/";
+  }
+
+  TFile *f_mc = TFile::Open(path+"/mc_nom/sm_tree.root" , "READONLY" );
+  cout<<"path: "<<path<<endl;
   TFile *f_data = TFile::Open(path+"/data/singlemu_tree.root" , "READONLY" );
   TTree *t_mc   = (TTree*)f_mc->Get("Events");
   TTree *t_data = (TTree*)f_data->Get("Events");
 
   // inclusive distributions -- get overall normalization factor
   TString cut_incl  = c_base+" && "+c_mass+" && "+c_ptrange; // init 20,50.,250.
-  TH1D *h_mc_incl   = create1Dhisto(name,t_mc,lumi,cut_incl,c_jet+"_1_mass",25,50.,300.,false,1,1,"h_"+name+"_mc_incl",false,false);    h_mc_incl->SetFillColor(0);
-  TH1D *h_data_incl = create1Dhisto(name,t_data,lumi,cut_incl,c_jet+"_1_mass",25,50.,300.,false,1,1,"h_"+name+"_data_incl",false,true); h_data_incl->SetFillColor(0);
+  TH1D *h_mc_incl   = create1Dhisto(name,t_mc,lumi,cut_incl,c_jet+"_1_mass",20,50.,250.,false,1,1,"h_"+name+"_mc_incl",false,false);    h_mc_incl->SetFillColor(0);
+  TH1D *h_data_incl = create1Dhisto(name,t_data,lumi,cut_incl,c_jet+"_1_mass",20,50.,250.,false,1,1,"h_"+name+"_data_incl",false,true); h_data_incl->SetFillColor(0);
   float scalemc2data = h_data_incl->Integral()/h_mc_incl->Integral(); std::cout << h_data_incl->Integral() << " " << h_mc_incl->Integral() << " overall norm = " << scalemc2data << "\n";
   ostringstream tmpscalemc2data;
   tmpscalemc2data << scalemc2data;
   TString scalemc2datastr = tmpscalemc2data.str(); std::cout << scalemc2datastr << "\n";
   
-  TH1D *h_data = create1Dhisto(name,t_data,lumi,cuts[0],c_jet+"_1_mass",25,50.,300.,false,1,1,"h_"+name+"_data",false,true); h_data->SetFillColor(0);
+  TH1D *h_data = create1Dhisto(name,t_data,lumi,cuts[0],c_jet+"_1_mass",20,50.,250.,false,1,1,"h_"+name+"_data",false,true); h_data->SetFillColor(0);
   h_data->SetMarkerColor(1); h_data->SetMarkerSize(1.2); h_data->SetMarkerStyle(20);
   h_data->SetLineWidth(1);
 
   // make dir
-  TString dirname1 = object+"_"+algo+"_"+syst;
+  TString dirname1 = workdir+"/"+object+"_"+algo+"_"+syst+"_mist_rate_"+mistRate;
   const int dir_err = system("mkdir -p ./"+dirname1);
   if (-1 == dir_err) { printf("Error creating directory!n"); exit(1); }
 
@@ -205,7 +261,9 @@ void makeSFTemplates(TString object, TString algo, TString wp, TString ptrange, 
   makeHisto(name, path,lumi+"*"+scalemc2datastr+"*LHEScaleWeight[7]*LHEScaleWeightNorm[7]",cuts,c_jet,"lhescalemur","up",fout);
   makeHisto(name, path,lumi+"*"+scalemc2datastr+"*LHEScaleWeight[1]*LHEScaleWeightNorm[1]",cuts,c_jet,"lhescalemur","down",fout);
   makeHistoLHEPDF(name,path,lumi+"*"+scalemc2datastr,cuts,c_jet,"lhepdf","def",fout);
-  makeHistoHerwig(name,path,lumi+"*"+scalemc2datastr,cuts,c_jet,"herwig",fout);
+  if(year==2016){
+      makeHistoHerwig(name,path,lumi+"*"+scalemc2datastr,cuts,c_jet,"herwig",fout);
+  }
 
   fout->Close();
   std::cout << "\n\n";
@@ -215,9 +273,9 @@ void makeSFTemplates(TString object, TString algo, TString wp, TString ptrange, 
 void makeHisto(TString name_, TString path_, TString wgt_, std::vector<TString> cuts_, TString c_jet_, TString sys_, TString var_, TFile *f_) {
 
   TFile *f_mc_; 
-  if ((sys_=="nom") || (sys_=="pu")) { f_mc_ = TFile::Open(path_+"/mc_nom/sm.root","READONLY"); }
-  else if (sys_.Contains("lhe"))     { f_mc_ = TFile::Open(path_+"/mc_sys/LHEWeight/sm.root","READONLY"); }
-  else                               { f_mc_ = TFile::Open(path_+"/mc_sys/"+sys_+"_"+var_+"/sm.root","READONLY"); }
+  if ((sys_=="nom") || (sys_=="pu")) { f_mc_ = TFile::Open(path_+"/mc_nom/sm_tree.root","READONLY"); }
+  else if (sys_.Contains("lhe"))     { f_mc_ = TFile::Open(path_+"/mc_sys/LHEWeight/sm_tree.root","READONLY"); }
+  else                               { f_mc_ = TFile::Open(path_+"/mc_sys/"+sys_+"_"+var_+"/sm_tree.root","READONLY"); }
   TTree *t_mc_ = (TTree*)f_mc_->Get("Events");
 
   // create histos
@@ -254,8 +312,8 @@ void makeHisto(TString name_, TString path_, TString wgt_, std::vector<TString> 
 
 void makeHistoHerwig(TString name_, TString path_, TString wgt_, std::vector<TString> cuts_, TString c_jet_, TString sys_, TFile *f_) {
 
-  TFile *f_mc_     = TFile::Open(path_+"/mc_nom/sm.root","READONLY");
-  TFile *f_mc_her_ = TFile::Open(path_+"/mc_nom/sm_herwig.root","READONLY");
+  TFile *f_mc_     = TFile::Open(path_+"/mc_nom/sm_tree.root","READONLY");
+  TFile *f_mc_her_ = TFile::Open(path_+"/mc_nom/sm_herwig_tree.root","READONLY");
 
   TTree *t_mc_     = (TTree*)f_mc_->Get("Events");
   TTree *t_mc_her_ = (TTree*)f_mc_her_->Get("Events");
@@ -319,7 +377,7 @@ void makeHistoHerwig(TString name_, TString path_, TString wgt_, std::vector<TSt
 void makeHistoLHEPDF(TString name_, TString path_, TString wgt_, std::vector<TString> cuts_, TString c_jet_, TString sys_, TString var_, TFile *f_) {
 
   // nom
-  TFile *f_mc_nom_ = TFile::Open(path_+"/mc_nom/sm.root","READONLY");
+  TFile *f_mc_nom_ = TFile::Open(path_+"/mc_nom/sm_tree.root","READONLY");
   TTree *t_mc_nom_ = (TTree*)f_mc_nom_->Get("Events");
 
   TH1D *h_p3_up = create1Dhisto(name_,t_mc_nom_,wgt_,cuts_[1],c_jet_+"_1_mass",20,50.,250.,false,kBlue,1,"h_"+name_+"_p3_"+sys_+"up",false,false);    h_p3_up->SetFillColor(0);
@@ -330,14 +388,14 @@ void makeHistoLHEPDF(TString name_, TString path_, TString wgt_, std::vector<TSt
   TH1D *h_p1_down = (TH1D*)h_p1_up->Clone("h_"+name_+"_p1_"+sys_+"down");
 
   // pdf
-  TFile *f_mc_ = TFile::Open(path_+"/mc_sys/LHEWeight/sm.root","READONLY");
+  TFile *f_mc_ = TFile::Open(path_+"/mc_sys/LHEWeight/sm_tree.root","READONLY");
   TTree *t_mc_ = (TTree*)f_mc_->Get("Events");
 
   std::vector<TH1D*> h_p3_v; h_p3_v.clear();
   std::vector<TH1D*> h_p2_v; h_p2_v.clear();
   std::vector<TH1D*> h_p1_v; h_p1_v.clear();
 
-  for (unsigned i=0; i<5; ++i){
+  for (unsigned i=0; i<15; ++i){
     TString count = std::to_string(i); //std::cout << i << " " << count << "\n";
     TString pdfwgt_ = "LHEPdfWeight["+count+"]*LHEPdfWeightNorm["+count+"]";
     TH1D *h_p3_ = create1Dhisto(name_,t_mc_,wgt_+"*"+pdfwgt_,cuts_[1],c_jet_+"_1_mass",20,50.,250.,false,kBlue,1,"h_"+name_+"_p3_"+sys_+var_+"_"+count,false,false);    h_p3_->SetFillColor(0);

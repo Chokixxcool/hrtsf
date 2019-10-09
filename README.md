@@ -21,7 +21,7 @@ scram b -j4
 
 -> run the SF code:
 ./calcTopWSF.sh "object" "year" "folder_name"
-where object [for now] is "T" or "W" year= 2016, 2017, 2018 folder_name=directory you want to store the files. A few things are currently hardcoded, tailored to the Heavy Reasonance Tagging paper needs. We are working on improving the fuctionality. 
+where object [for now] is "T" or "W" year= 2016, 2017, 2018, folder_name=directory you want to store the files. A few things are currently hardcoded, tailored to the Heavy Reasonance Tagging paper needs. We are working on improving the fuctionality. 
 
 The templates and the datacards are produced with makeSFTemplates.C and makeSFDatacard.C scripts. Simple examples for now.
 

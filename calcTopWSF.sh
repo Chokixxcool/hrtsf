@@ -171,10 +171,7 @@ do
 		    inputname=${object}"_"${algo}"_"${wp}"_"${ptrange}
 
                     cp ../../makeSFDatacard.C .
-
-                    cp ../../combineTool.py .
-                    cp ../../plotImpacts.py . 
-                           
+                          
                     cmdmakedatacard=$(echo 'makeSFDatacard.C("'${inputname}'",'${year}')')
 		    root -l -q ${cmdmakedatacard} > sf.txt
 		    sed -n -i '3,$ p' sf.txt
@@ -197,10 +194,10 @@ do
 	 	    #combine -M FitDiagnostics -m 125 sf"_"${inputname}.root --saveShapes --saveWithUncertainties --robustFit 1 --cminDefaultMinimizerStrategy 0
 		    mv fitDiagnostics.root sf"_"fitDiagnostics"_"${inputname}".root"
                     
-                    python combineTool.py -M Impacts -d sf"_"${inputname}.root -m 125 --doInitialFit --robustFit 1
-		    python combineTool.py -M Impacts -d sf"_"${inputname}.root -m 125 --robustFit 1 --doFits --parallel 60
-		    python combineTool.py -M Impacts -d sf"_"${inputname}.root -m 125 -o impacts.json
-                    python plotImpacts.py -i impacts.json -o impacts		
+                    combineTool.py -M Impacts -d sf"_"${inputname}.root -m 125 --doInitialFit --robustFit 1
+		    combineTool.py -M Impacts -d sf"_"${inputname}.root -m 125 --robustFit 1 --doFits --parallel 60
+		    combineTool.py -M Impacts -d sf"_"${inputname}.root -m 125 -o impacts.json
+                    plotImpacts.py -i impacts.json -o impacts		
 
                     mv impacts.pdf impacts"_"${inputname}.pdf
  

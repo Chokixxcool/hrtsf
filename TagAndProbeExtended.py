@@ -26,7 +26,7 @@ class TagAndProbeExtended(PhysicsModel):
         """Create POI and other parameters, and define the POI set."""
         pois = []
         for cat in self._categories:
-            self.modelBuilder.doVar("SF_%s[1,0.,5]" % cat)
+            self.modelBuilder.doVar("SF_%s[1,0.,2.]" % cat)
             pois.append('SF_%s' % cat)
         self.modelBuilder.doSet("POI", ','.join(pois))
 

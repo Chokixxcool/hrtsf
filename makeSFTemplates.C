@@ -205,18 +205,21 @@ void makeSFTemplates(TString object, TString algo, TString wp, TString ptrange, 
   leg_sample.push_back("unmatched");
   leg_sample.push_back("Data");
 
-
+  TString EOSCMS="root://eoscms.cern.ch/";
   //TString path = "/eos/uscms/store/group/lpcjme/noreplica/NanoHRT/Trees/Apr08/muon/";
   TString path; 
   if(year==2016){
-      path = "/eos/uscms/store/user/pakontax/2016/";
+      path = EOSCMS;
+      path += "/eos/cms/store/group/phys_jetmet/nbinnorj/WTopTagging/ntuples_HRTSF/2016/";
   }
   else if(year==2017){
-      path = "/eos/uscms/store/user/pakontax/29July/";
+      path = EOSCMS;
+      path += "/eos/cms/store/group/phys_jetmet/nbinnorj/WTopTagging/ntuples_HRTSF/29July/";
   }  
   else if(year==2018){
       //path = "/eos/uscms/store/user/pakontax/2018_Samples_From_Sicheng_For_Copy_V2/";
-      path = "/eos/uscms/store/user/pakontax/3Oct_For_Copy/";
+      path = EOSCMS;
+      path += "/eos/cms/store/group/phys_jetmet/nbinnorj/WTopTagging/ntuples_HRTSF/3Oct_For_Copy/";
   }
 
   TFile *f_mc = TFile::Open(path+"/mc_nom/sm_tree.root" , "READONLY" );

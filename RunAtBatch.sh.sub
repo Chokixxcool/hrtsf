@@ -1,0 +1,128 @@
+executable    = RunAtBatch.sh 
+universe      = vanilla
+output        = BatchLog/HRTSF.$(OBJECT).$(YEAR).$(PTBIN).$(ALGO).$(MISTRATES).$(ClusterId).$(ProcId).out
+error         = BatchLog/HRTSF.$(OBJECT).$(YEAR).$(PTBIN).$(ALGO).$(MISTRATES).$(ClusterId).$(ProcId).err
+log           = BatchLog/HRTSF.$(ClusterId).log
+stream_output = True
+stream_error  = True
+
++JobFlavour   = "microcentury"
+arguments = $(OBJECT) $(YEAR) $(OUTDIR) $(PTBIN) $(ALGO) $(MISTRATES)
+queue OBJECT YEAR OUTDIR PTBIN ALGO MISTRATES from ( 
+W 2016 hrtsf_2016 incl deepak8 0p1
+W 2016 hrtsf_2016 low deepak8 0p1
+W 2016 hrtsf_2016 lowmed deepak8 0p1
+W 2016 hrtsf_2016 med deepak8 0p1
+W 2016 hrtsf_2016 incl sdtau21 0p1
+W 2016 hrtsf_2016 low sdtau21 0p1
+W 2016 hrtsf_2016 lowmed sdtau21 0p1
+W 2016 hrtsf_2016 med sdtau21 0p1
+
+W 2016 hrtsf_2016 incl deepak8 0p5
+W 2016 hrtsf_2016 low deepak8 0p5
+W 2016 hrtsf_2016 lowmed deepak8 0p5
+W 2016 hrtsf_2016 med deepak8 0p5
+W 2016 hrtsf_2016 incl sdtau21 0p5
+W 2016 hrtsf_2016 low sdtau21 0p5
+W 2016 hrtsf_2016 lowmed sdtau21 0p5
+W 2016 hrtsf_2016 med sdtau21 0p5
+
+W 2016 hrtsf_2016 incl deepak8 1p0
+W 2016 hrtsf_2016 low deepak8 1p0
+W 2016 hrtsf_2016 lowmed deepak8 1p0
+W 2016 hrtsf_2016 med deepak8 1p0
+W 2016 hrtsf_2016 incl sdtau21 1p0
+W 2016 hrtsf_2016 low sdtau21 1p0
+W 2016 hrtsf_2016 lowmed sdtau21 1p0
+W 2016 hrtsf_2016 med sdtau21 1p0
+
+W 2016 hrtsf_2016 incl deepak8 5p0
+W 2016 hrtsf_2016 low deepak8 5p0
+W 2016 hrtsf_2016 lowmed deepak8 5p0
+W 2016 hrtsf_2016 med deepak8 5p0
+W 2016 hrtsf_2016 incl sdtau21 5p0
+W 2016 hrtsf_2016 low sdtau21 5p0
+W 2016 hrtsf_2016 lowmed sdtau21 5p0
+W 2016 hrtsf_2016 med sdtau21 5p0
+)
+
+#+JobFlavour   = "espresso"
+#arguments = $(OBJECT) $(YEAR) $(OUTDIR) $(PTBIN) $(ALGO) $(MISTRATES)
+#queue OBJECT YEAR OUTDIR PTBIN ALGO MISTRATES from ( 
+#W 2017 hrtsf_2017 incl deepak8 0p1
+#W 2017 hrtsf_2017 low deepak8 0p1
+#W 2017 hrtsf_2017 lowmed deepak8 0p1
+#W 2017 hrtsf_2017 med deepak8 0p1
+#W 2017 hrtsf_2017 incl sdtau21 0p1
+#W 2017 hrtsf_2017 low sdtau21 0p1
+#W 2017 hrtsf_2017 lowmed sdtau21 0p1
+#W 2017 hrtsf_2017 med sdtau21 0p1
+#
+#W 2017 hrtsf_2017 incl deepak8 0p5
+#W 2017 hrtsf_2017 low deepak8 0p5
+#W 2017 hrtsf_2017 lowmed deepak8 0p5
+#W 2017 hrtsf_2017 med deepak8 0p5
+#W 2017 hrtsf_2017 incl sdtau21 0p5
+#W 2017 hrtsf_2017 low sdtau21 0p5
+#W 2017 hrtsf_2017 lowmed sdtau21 0p5
+#W 2017 hrtsf_2017 med sdtau21 0p5
+#
+#W 2017 hrtsf_2017 incl deepak8 1p0
+#W 2017 hrtsf_2017 low deepak8 1p0
+#W 2017 hrtsf_2017 lowmed deepak8 1p0
+#W 2017 hrtsf_2017 med deepak8 1p0
+#W 2017 hrtsf_2017 incl sdtau21 1p0
+#W 2017 hrtsf_2017 low sdtau21 1p0
+#W 2017 hrtsf_2017 lowmed sdtau21 1p0
+#W 2017 hrtsf_2017 med sdtau21 1p0
+#
+#W 2017 hrtsf_2017 incl deepak8 5p0
+#W 2017 hrtsf_2017 low deepak8 5p0
+#W 2017 hrtsf_2017 lowmed deepak8 5p0
+#W 2017 hrtsf_2017 med deepak8 5p0
+#W 2017 hrtsf_2017 incl sdtau21 5p0
+#W 2017 hrtsf_2017 low sdtau21 5p0
+#W 2017 hrtsf_2017 lowmed sdtau21 5p0
+#W 2017 hrtsf_2017 med sdtau21 5p0
+#
+#)
+
+#+JobFlavour   = "espresso"
+#arguments = $(OBJECT) $(YEAR) $(OUTDIR) $(PTBIN) $(ALGO) $(MISTRATES)
+#queue OBJECT YEAR OUTDIR PTBIN ALGO MISTRATES from ( 
+#W 2018 hrtsf_2018 incl deepak8 0p1
+#W 2018 hrtsf_2018 low deepak8 0p1
+#W 2018 hrtsf_2018 lowmed deepak8 0p1
+#W 2018 hrtsf_2018 med deepak8 0p1
+#W 2018 hrtsf_2018 incl sdtau21 0p1
+#W 2018 hrtsf_2018 low sdtau21 0p1
+#W 2018 hrtsf_2018 lowmed sdtau21 0p1
+#W 2018 hrtsf_2018 med sdtau21 0p1
+#
+#W 2018 hrtsf_2018 incl deepak8 0p5
+#W 2018 hrtsf_2018 low deepak8 0p5
+#W 2018 hrtsf_2018 lowmed deepak8 0p5
+#W 2018 hrtsf_2018 med deepak8 0p5
+#W 2018 hrtsf_2018 incl sdtau21 0p5
+#W 2018 hrtsf_2018 low sdtau21 0p5
+#W 2018 hrtsf_2018 lowmed sdtau21 0p5
+#W 2018 hrtsf_2018 med sdtau21 0p5
+#
+#W 2018 hrtsf_2018 incl deepak8 1p0
+#W 2018 hrtsf_2018 low deepak8 1p0
+#W 2018 hrtsf_2018 lowmed deepak8 1p0
+#W 2018 hrtsf_2018 med deepak8 1p0
+#W 2018 hrtsf_2018 incl sdtau21 1p0
+#W 2018 hrtsf_2018 low sdtau21 1p0
+#W 2018 hrtsf_2018 lowmed sdtau21 1p0
+#W 2018 hrtsf_2018 med sdtau21 1p0
+#
+#W 2018 hrtsf_2018 incl deepak8 5p0
+#W 2018 hrtsf_2018 low deepak8 5p0
+#W 2018 hrtsf_2018 lowmed deepak8 5p0
+#W 2018 hrtsf_2018 med deepak8 5p0
+#W 2018 hrtsf_2018 incl sdtau21 5p0
+#W 2018 hrtsf_2018 low sdtau21 5p0
+#W 2018 hrtsf_2018 lowmed sdtau21 5p0
+#W 2018 hrtsf_2018 med sdtau21 5p0
+#)

@@ -53,6 +53,7 @@ void makeDataMCPlotsFromCombine(TString path2file, TString filename, TString sco
 
   if (xaxisname == "mass") { xaxisname = "m(jet) [GeV]"; }
 
+  std::cout << "Making plots_datamc directory" << "\n";
   const int dir_err = system("mkdir -p ./"+(TString)path2file+"/plots_datamc");
   if (-1 == dir_err) { printf("Error creating directory!n"); exit(1); }
   TFile *fdiag = TFile::Open("./"+path2file+"/sf_fitDiagnostics_"+filename+".root", "READONLY" );

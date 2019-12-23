@@ -1,8 +1,8 @@
 #!/bin/bash
-
 cd /afs/cern.ch/user/s/ssyedoma/work/JMARWTag/TempFit/CMSSW_10_2_13/src/
+source /afs/cern.ch/user/s/ssyedoma/root6.18.sh
 eval `scramv1 runtime -sh`
-cd /afs/cern.ch/user/ss/syedoma/work/JMARWTag/TempFit/CMSSW_10_2_13/src/hrtsf/
+cd /afs/cern.ch/user/s/ssyedoma/work/JMARWTag/TempFit/CMSSW_10_2_13/src/hrtsf/
 
 OBJECT=${1}
 YEAR=${2}

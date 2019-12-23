@@ -26,18 +26,18 @@ void makeSFDatacard(std::string inputname, int year) {
   std::cout << "# the second 'process' line must have a positive number for backgrounds, and 0 for signal\n";
   std::cout << "# then we list the independent sources of uncertainties, and give their effect (syst. error)\n";
   std::cout << "# on each process and bin\n";
-  std::cout << "bin             pass   pass   pass       fail   fail   fail\n";
-  std::cout << "process         catp2   catp3   catp1      catp2   catp3   catp1\n";  
-  std::cout << "process            -1     -2      3         -1     -2       3\n";
+  std::cout << "bin             pass    pass   pass       fail   fail   fail\n";
+  std::cout << "process         catp2   catp3   catp1    catp2   catp3   catp1\n";  
+  std::cout << "process            -1     -2      3       -1     -2       3\n";
   std::cout << "rate            " 
 	    << h_catp2_pass->Integral(1,h_catp2_pass->GetNbinsX()) << " " << h_catp3_pass->Integral(1,h_catp3_pass->GetNbinsX()) << " " << h_catp1_pass->Integral(1,h_catp1_pass->GetNbinsX()) << " "
 	    << h_catp2_fail->Integral(1,h_catp2_fail->GetNbinsX()) << " " << h_catp3_fail->Integral(1,h_catp3_fail->GetNbinsX()) << " " << h_catp1_fail->Integral(1,h_catp1_fail->GetNbinsX()) << "\n";
   std::cout << "------------\n";
-  std::cout << "lumi    lnN    1.025  1.025  1.025  1.025  1.025  1.025\n";
-  std::cout << "pu          shape     1      1      1      1      1      1  \n";
-  std::cout << "jer         shape     1      1      1      1      1      1  \n";
-  std::cout << "jes         shape     1      1      1      1      1      1  \n";
-  std::cout << "met         shape     1      1      1      1      1      1  \n";
+  std::cout << "lumi    lnN     1.025  1.025  1.025  1.025  1.025  1.025\n";
+  std::cout << "pu      shape     1      1      1      1      1      1  \n";
+  std::cout << "jer     shape     1      1      1      1      1      1  \n";
+  std::cout << "jes     shape     1      1      1      1      1      1  \n";
+  std::cout << "met     shape     1      1      1      1      1      1  \n";
   // if(year==2016){ 
   //      std::cout << "herwig      shape     1      1      1      1      1      1  \n";
   // }   

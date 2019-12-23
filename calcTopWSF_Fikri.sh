@@ -181,69 +181,72 @@ do
       #   fi
         #############################################################
         ## make templates ##
-        echo "make templates"
-        cmdpass=$(echo 'makeSFTemplates.C("'${object}'","'${algo}'","'${wp}'","'${ptrange}'","'${syst}'",true,"'${mistRate}'",'${WP_binarized}','${WP_binarizedMD}','${WP_raw}','${WP_rawMD}','${year}',"'${workdir0}'")')
-        cmdfail=$(echo 'makeSFTemplates.C("'${object}'","'${algo}'","'${wp}'","'${ptrange}'","'${syst}'",false,"'${mistRate}'",'${WP_binarized}','${WP_binarizedMD}','${WP_raw}','${WP_rawMD}','${year}',"'${workdir0}'")')
-
-        root -l -b -q ${cmdpass}
-        root -l -b -q ${cmdfail}
+        # echo "make templates"
+        # cmdpass=$(echo 'makeSFTemplates.C("'${object}'","'${algo}'","'${wp}'","'${ptrange}'","'${syst}'",true,"'${mistRate}'",'${WP_binarized}','${WP_binarizedMD}','${WP_raw}','${WP_rawMD}','${year}',"'${workdir0}'")')
+        # cmdfail=$(echo 'makeSFTemplates.C("'${object}'","'${algo}'","'${wp}'","'${ptrange}'","'${syst}'",false,"'${mistRate}'",'${WP_binarized}','${WP_binarizedMD}','${WP_raw}','${WP_rawMD}','${year}',"'${workdir0}'")')
+        # echo "*********** pass ***********"
+        # root -l -b -q ${cmdpass}
+        # echo "*********** fail ***********"
+        # root -l -b -q ${cmdfail}
         #############################################################
-        # ## make datacard ##
-        # # cd /afs/cern.ch/user/s/ssyedoma/work/JMARWTag/TempFit/CMSSW_10_2_13/src/hrtsf/${workdir}
-        # # inputname=${object}"_"${algo}"_"${wp}"_"${ptrange}
-        # # echo "make datacard"
-        # echo " "
+        ## make datacard ##
+        cd /afs/cern.ch/user/s/ssyedoma/work/JMARWTag/TempFit/CMSSW_10_2_13/src/hrtsf/${workdir}
+        inputname=${object}"_"${algo}"_"${wp}"_"${ptrange}
+        echo "make datacard"
+        echo " "
 
-        # cp ../../makeSFDatacard.C .
+        cp ../../makeSFDatacard.C .
               
-        # # cmdmakedatacard=$(echo 'makeSFDatacard.C("'${inputname}'",'${year}')')
-        # # root -l -q ${cmdmakedatacard} > sf.txt
-        # sed -n -i '3,$ p' sf.txt
+        cmdmakedatacard=$(echo 'makeSFDatacard.C("'${inputname}'",'${year}')')
+        root -l -b -q ${cmdmakedatacard} > sf"_"datacard"_"${inputname}".txt"
+        sed -n -i '3,$ p' sf"_"datacard"_"${inputname}".txt"
 
-        ##############################################################
-        # ## do the tag and probe ##
-        # # cd /afs/cern.ch/user/s/ssyedoma/work/JMARWTag/TempFit/CMSSW_10_2_13/src/hrtsf/${workdir}
-        # # inputname=${object}"_"${algo}"_"${wp}"_"${ptrange}
-        # # echo "run the tag and probe"
-        # if [ ${object} == "T" ];
-        # then
-        #   text2workspace.py -m 125 -P HiggsAnalysis.CombinedLimit.TagAndProbeExtended:tagAndProbe sf.txt --PO categories=catp3,catp2,catp1
-        # elif [ ${object} == "W" ];
-        # then    
-        #   text2workspace.py -m 125 -P HiggsAnalysis.CombinedLimit.TagAndProbeExtended:tagAndProbe sf.txt --PO categories=catp2,catp3,catp1
-        #   # text2workspace.py -m 125 -P HiggsAnalysis.CombinedLimit.TagAndProbeExtended:tagAndProbe sf"_"datacard"_"${inputname}".txt" --PO categories=catp2,catp3,catp1
+        #############################################################
+        ## do the tag and probe ##
+        cd /afs/cern.ch/user/s/ssyedoma/work/JMARWTag/TempFit/CMSSW_10_2_13/src/hrtsf/${workdir}
+        inputname=${object}"_"${algo}"_"${wp}"_"${ptrange}
+        echo "run the tag and probe"
+        if [ ${object} == "T" ];
+        then
+          text2workspace.py -m 125 -P HiggsAnalysis.CombinedLimit.TagAndProbeExtended:tagAndProbe sf.txt --PO categories=catp3,catp2,catp1
+        elif [ ${object} == "W" ];
+        then    
+          # text2workspace.py -m 125 -P HiggsAnalysis.CombinedLimit.TagAndProbeExtended:tagAndProbe sf.txt --PO categories=catp2,catp3,catp1
+          text2workspace.py -m 125 -P HiggsAnalysis.CombinedLimit.TagAndProbeExtended:tagAndProbe sf"_"datacard"_"${inputname}".txt" --PO categories=catp2,catp3,catp1
 
-        # fi
+        fi
         # mv sf.root sf"_"${inputname}".root"
+        mv sf"_"datacard"_"${inputname}".root" sf"_"${inputname}".root"
 
-        # echo "Do the MultiDimFit"
-        # combine -M MultiDimFit -m 125 sf"_"${inputname}".root" --algo=singles --robustFit 1 --cminDefaultMinimizerTolerance 5.
-        # # combine -M MultiDimFit -m 125 sf"_"${inputname}.root --algo=singles --robustFit 1 --cminDefaultMinimizerStrategy 0
-        # echo "Run the FitDiagnostics"    
-        # combine -M FitDiagnostics -m 125 sf"_"${inputname}".root" --saveShapes --saveWithUncertainties --robustFit 1 --cminDefaultMinimizerTolerance 5.
-        # # # combine -M FitDiagnostics -m 125 sf"_"${inputname}.root --saveShapes --saveWithUncertainties --robustFit 1 --cminDefaultMinimizerStrategy 0
-        # mv fitDiagnostics.root sf"_"fitDiagnostics"_"${inputname}".root"
+        echo "Do the MultiDimFit"
+        combine -M MultiDimFit -m 125 sf"_"${inputname}".root" --algo=singles --robustFit 1 --cminDefaultMinimizerTolerance 5.
+        # combine -M MultiDimFit -m 125 sf"_"${inputname}.root --algo=singles --robustFit 1 --cminDefaultMinimizerStrategy 0
+        echo "Run the FitDiagnostics"    
+        combine -M FitDiagnostics -n "_"${inputname} -m 125 sf"_"${inputname}".root" --saveShapes --saveWithUncertainties --robustFit 1 --cminDefaultMinimizerTolerance 5.
+        # # combine -M FitDiagnostics -m 125 sf"_"${inputname}.root --saveShapes --saveWithUncertainties --robustFit 1 --cminDefaultMinimizerStrategy 0
+        
+        mv fitDiagnostics"_"${inputname}.root sf"_"fitDiagnostics"_"${inputname}".root"
     
-        # combineTool.py -M Impacts -d sf"_"${inputname}.root -m 125 --doInitialFit --robustFit 1
-        # combineTool.py -M Impacts -d sf"_"${inputname}.root -m 125 --robustFit 1 --doFits --parallel 60
-        # combineTool.py -M Impacts -d sf"_"${inputname}.root -m 125 -o impacts.json --robustFit 1 
-        # plotImpacts.py -i impacts.json -o impacts
+        combineTool.py -M Impacts -d sf"_"${inputname}.root -m 125 --doInitialFit --robustFit 1
+        combineTool.py -M Impacts -d sf"_"${inputname}.root -m 125 --robustFit 1 --doFits --parallel 60
+        combineTool.py -M Impacts -d sf"_"${inputname}.root -m 125 -o impacts"_"${inputname}.json --robustFit 1 
+        plotImpacts.py -i impacts"_"${inputname}.json -o impacts"_"${inputname}
 
         # mv impacts.pdf impacts"_"${inputname}.pdf
-        # cp impacts"_"${inputname}.pdf ${eosdir}
+        cp impacts"_"${inputname}.pdf ${eosdir}
 
-        # rm higgsCombine_paramFit_*  
-        # rm combineTool.py
-        # rm plotImpacts.py
-        # rm impacts.json
+        rm higgsCombine_paramFit_*  
+        rm combineTool.py
+        rm plotImpacts.py
+        rm impacts.json
                    
         # mv sf.txt sf"_"datacard"_"${inputname}".txt"
-        # cd ../../
-        # cmdmake=$(echo 'makePlots.C("'${workdir}'","'${inputname}'","'${wp}'","'${ptrange}'",'50.','250.','20',"mass")')
-        # root -l -q ${cmdmake}
-        # echo "copying plots_datamc to EOS"
-        # mkdir ${eosdir}"/"plots_datamc 
-        # cp -r ${workdir}"/"plots_datamc ${eosdir}
+        cd ../../
+        cmdmake=$(echo 'makePlots.C("'${workdir}'","'${inputname}'","'${wp}'","'${ptrange}'",'50.','250.','20',"mass")')
+        root -l -q ${cmdmake}
+        echo "copying plots_datamc to EOS"
+        mkdir ${eosdir}"/"plots_datamc 
+        cp -r ${workdir}"/"plots_datamc ${eosdir}
       # done
     done
   # done

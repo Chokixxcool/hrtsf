@@ -13,13 +13,13 @@ observation      1000  5227
 # the second 'process' line must have a positive number for backgrounds, and 0 for signal
 # then we list the independent sources of uncertainties, and give their effect (syst. error)
 # on each process and bin
-bin             pass   pass   pass       fail   fail   fail
-process         catp2   catp3   catp1      catp2   catp3   catp1
-process            -1     -2      3         -1     -2       3
+bin             pass    pass   pass       fail   fail   fail
+process         catp2   catp3   catp1    catp2   catp3   catp1
+process            -1     -2      3       -1     -2       3
 rate            981.789 38.4636 216.643 886.158 425.178 3678.79
 ------------
-lumi    lnN    1.025  1.025  1.025  1.025  1.025  1.025
-pu          shape     1      1      1      1      1      1  
-jer         shape     1      1      1      1      1      1  
-jes         shape     1      1      1      1      1      1  
-met         shape     1      1      1      1      1      1  
+lumi    lnN     1.025  1.025  1.025  1.025  1.025  1.025
+pu      shape     1      1      1      1      1      1  
+jer     shape     1      1      1      1      1      1  
+jes     shape     1      1      1      1      1      1  
+met     shape     1      1      1      1      1      1  

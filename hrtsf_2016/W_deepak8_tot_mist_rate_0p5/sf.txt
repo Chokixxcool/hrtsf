@@ -1,0 +1,19 @@
+------------
+# we have just one channel, in which we observe 0 events
+bin             pass    fail
+observation      2343  18007
+------------
+# now we list the expected events for signal and all backgrounds in that bin
+# the second 'process' line must have a positive number for backgrounds, and 0 for signal
+# then we list the independent sources of uncertainties, and give their effect (syst. error)
+# on each process and bin
+bin             pass    pass   pass       fail   fail   fail
+process         catp2   catp3   catp1    catp2   catp3   catp1
+process            -1     -2      3       -1     -2       3
+rate            1987.21 151.859 388.705 2998.17 2867.32 11956.7
+------------
+lumi    lnN     1.025  1.025  1.025  1.025  1.025  1.025
+pu      shape     1      1      1      1      1      1  
+jer     shape     1      1      1      1      1      1  
+jes     shape     1      1      1      1      1      1  
+met     shape     1      1      1      1      1      1  

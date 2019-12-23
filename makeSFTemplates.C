@@ -69,7 +69,6 @@ void makeSFTemplates(TString object, TString algo, TString wp, TString ptrange, 
     c_jet = "ak8"; c_r = "0.8";
     if (wp == "JMAR") { c_algo_wp = "((1-"+c_jet+"_1_tau3/"+c_jet+"_1_tau2)>0.4422)"; }
   }
-
   if (algo == "sdtau32btag") { 
     c_jet = "ak8"; c_r = "0.8";
     if (wp == "JMAR") { c_algo_wp = "((1-"+c_jet+"_1_tau3/"+c_jet+"_1_tau2)>0.3973 && max("+c_jet+"_1_sj1_btagCSVV2,"+c_jet+"_1_sj2_btagCSVV2)>0.5426)"; }
@@ -230,7 +229,7 @@ void makeSFTemplates(TString object, TString algo, TString wp, TString ptrange, 
 
   // inclusive distributions -- get overall normalization factor
   TString cut_incl  = c_base+" && "+c_mass+" && "+c_ptrange; // init 20,50.,250.
-  TH1D *h_mc_incl   = create1Dhisto(name,t_mc,lumi,cut_incl,c_jet+"_1_mass",20,50.,250.,false,1,1,"h_"+name+"_mc_incl",false,false);    h_mc_incl->SetFillColor(0);
+  TH1D *h_mc_incl   = create1Dhisto(name,t_mc,lumi,cut_incl,c_jet+"_1_mass",20,50.,250.,false,1,1,"h_"+name+"_mc_incl",false,false); h_mc_incl->SetFillColor(0);
   TH1D *h_data_incl = create1Dhisto(name,t_data,lumi,cut_incl,c_jet+"_1_mass",20,50.,250.,false,1,1,"h_"+name+"_data_incl",false,true); h_data_incl->SetFillColor(0);
   float scalemc2data = h_data_incl->Integral()/h_mc_incl->Integral(); std::cout << h_data_incl->Integral() << " " << h_mc_incl->Integral() << " overall norm = " << scalemc2data << "\n";
   ostringstream tmpscalemc2data;

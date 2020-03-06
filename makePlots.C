@@ -10,6 +10,7 @@
 #include "TVectorF.h"
 #include <cstdlib>
 
+void getSFSummarySources(TString object, TString wp);
 TH1F *rescaleXaxis(TH1F *inputhisto, float xmin, float xmax);
 void rescaleXaxis(TGraphAsymmErrors *inputhisto, double xmin, double scale);
 TH1F *getDataMCratio(TGraphAsymmErrors *indata, TH1F *inMC);
@@ -22,8 +23,9 @@ TGraphAsymmErrors *getSFGraph(TString object, TString algo, TString wp, std::vec
 TGraphAsymmErrors *getSFGraphSyst(TString object, TString algo, TString wp, std::vector<TString> ptrange, int ialgo, int nalgos, int color, TString extra, TGraphAsymmErrors *gr_nom);
 double median(std::vector<TString> vec);
 void getdiscvalmistag(float eff, TString algo, TString algosvar, TString jettype, TString object, TString cut);
+/////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 
-void makePlots(TString path2file, TString filename, TString score, TString ptrange, float xmin, float xmax, int nbins, TString xaxis) {
+void makePlots(TString path2file, TString filename, TString score, TString ptrange, float xmin, float xmax, int nbins, TString xaxis, TString object, TString wp) {
   TH1::SetDefaultSumw2(kTRUE);
 
   setTDRStyle();
@@ -37,9 +39,12 @@ void makePlots(TString path2file, TString filename, TString score, TString ptran
   // make pre/post fit plots
   makeDataMCPlotsFromCombine(path2file,filename,score,ptrange,"pass",xmin,xmax,nbins,xaxis,false);
   makeDataMCPlotsFromCombine(path2file,filename,score,ptrange,"fail",xmin,xmax,nbins,xaxis,false);
-   
-}
 
+  // make SF plots
+  cout << "running getSFSummarySources . . .";
+  getSFSummarySources(object, wp);
+
+}
 
 void makeDataMCPlotsFromCombine(TString path2file, TString filename, TString score, TString ptrange, TString category,
  				float xmin, float xmax, int nbins,TString xaxisname, bool log) {
@@ -404,16 +409,16 @@ void getSFSummarySources(TString object, TString wp) {
   }
 
   if (object=="W") {
-    algos.push_back("sdtau21");     legnames.push_back("m_{SD}+#tau_{21}");   colors.push_back(800);
-    algos.push_back("sdn2");        legnames.push_back("m_{SD}+N_{2}");       colors.push_back(408);
-    algos.push_back("sdn2ddt");     legnames.push_back("m_{SD}+N_{2}^{DDT}"); colors.push_back(419);
-    algos.push_back("best");        legnames.push_back("BEST");               colors.push_back(882);
+    // algos.push_back("sdtau21");     legnames.push_back("m_{SD}+#tau_{21}");   colors.push_back(800);
+    // algos.push_back("sdn2");        legnames.push_back("m_{SD}+N_{2}");       colors.push_back(408);
+    // algos.push_back("sdn2ddt");     legnames.push_back("m_{SD}+N_{2}^{DDT}"); colors.push_back(419);
+    // algos.push_back("best");        legnames.push_back("BEST");               colors.push_back(882);
     algos.push_back("deepak8");     legnames.push_back("DeepAK8");            colors.push_back(866);
-    algos.push_back("deepak8md");   legnames.push_back("DeepAK8-MD");         colors.push_back(616);
+    // algos.push_back("deepak8md");   legnames.push_back("DeepAK8-MD");         colors.push_back(616);
     
     ptrange.push_back("low");
-    ptrange.push_back("lowmed");
-    ptrange.push_back("med");
+    // ptrange.push_back("lowmed");
+    // ptrange.push_back("med");
   }
  
 
@@ -429,13 +434,13 @@ void getSFSummarySources(TString object, TString wp) {
   for (unsigned int ialgo=0; ialgo<algos.size(); ++ialgo) {
     
     TGraphAsymmErrors *gr_tot  = getSFGraph(object,algos[ialgo],wp,ptrange,ialgo,algos.size(),colors[ialgo]);                   gr_tot->SetName("gr_tot_"+algos[ialgo]);
-    TGraphAsymmErrors *gr_stat = getSFGraphSyst(object,algos[ialgo],wp,ptrange,ialgo,algos.size(),colors[ialgo],"stat",gr_tot); gr_stat->SetName("gr_stat_"+algos[ialgo]);
+    // TGraphAsymmErrors *gr_stat = getSFGraphSyst(object,algos[ialgo],wp,ptrange,ialgo,algos.size(),colors[ialgo],"stat",gr_tot); gr_stat->SetName("gr_stat_"+algos[ialgo]);
 
     gr_tot->SetFillColor(colors[ialgo]);  gr_tot->SetFillStyle(3002); gr_tot->SetLineColor(colors[ialgo]); 
-    gr_stat->SetLineWidth(1); gr_stat->SetLineColor(colors[ialgo]); gr_stat->SetFillColor(0); gr_stat->SetFillStyle(0); gr_stat->SetMarkerSize(1);
+    // gr_stat->SetLineWidth(1); gr_stat->SetLineColor(colors[ialgo]); gr_stat->SetFillColor(0); gr_stat->SetFillStyle(0); gr_stat->SetMarkerSize(1);
 
     gr_sf.push_back(gr_tot);
-    gr_sf_stat.push_back(gr_stat);
+    // gr_sf_stat.push_back(gr_stat);
 
   } // end looping over files
 
@@ -493,9 +498,9 @@ TGraphAsymmErrors *getSFGraph(TString object, TString algo, TString wp, std::vec
   
   double xval[20], xvalerr[20];
   double yval[20], yvalerrlo[20], yvalerrhi[20];
-  
+  TString year = "2018";
   for (unsigned int iptrange=0; iptrange<ptrange.size(); ++iptrange) {
-    TFile *fdiag = TFile::Open("./"+object+"_"+algo+"_tot/sf_fitDiagnostics_"+object+"_"+algo+"_"+wp+"_"+ptrange[iptrange]+".root", "READONLY" );
+    TFile *fdiag = TFile::Open("./hrtsf_"+year+"/"+object+"_"+algo+"_tot_mist_rate_"+wp+"/sf_fitDiagnostics_"+object+"_"+algo+"_JMAR_"+ptrange[iptrange]+".root", "READONLY" );
     TTree *t_   = (TTree*)fdiag->Get("tree_fit_sb");
     
     TString strCat, strCatLoErr, strCatHiErr;   
@@ -525,6 +530,7 @@ TGraphAsymmErrors *getSFGraph(TString object, TString algo, TString wp, std::vec
   gr_sf_tmp->SetLineColor(color);
   gr_sf_tmp->SetMarkerColor(color);
   return gr_sf_tmp;
+
 }
 
 
@@ -904,11 +910,11 @@ void getMisTagRates(TString sample, TString object, TString wp) {
 
   if (object=="W") {
     algos.push_back("sdtau21");     legnames.push_back("m_{SD}+#tau_{21}");   colors.push_back(800);
-    algos.push_back("sdn2");        legnames.push_back("m_{SD}+N_{2}");       colors.push_back(408);
-    algos.push_back("sdn2ddt");     legnames.push_back("m_{SD}+N_{2}^{DDT}"); colors.push_back(419);
-    algos.push_back("best");        legnames.push_back("BEST");               colors.push_back(882);
+    // algos.push_back("sdn2");        legnames.push_back("m_{SD}+N_{2}");       colors.push_back(408);
+    // algos.push_back("sdn2ddt");     legnames.push_back("m_{SD}+N_{2}^{DDT}"); colors.push_back(419);
+    // algos.push_back("best");        legnames.push_back("BEST");               colors.push_back(882);
     algos.push_back("deepak8");     legnames.push_back("DeepAK8");            colors.push_back(866);
-    algos.push_back("deepak8md");   legnames.push_back("DeepAK8-MD");         colors.push_back(616);
+    // algos.push_back("deepak8md");   legnames.push_back("DeepAK8-MD");         colors.push_back(616);
   }
 
   // baseline selection

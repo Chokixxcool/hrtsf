@@ -60,64 +60,13 @@ void makeSFTemplates(TString object, TString algo, TString wp, TString ptrange, 
        c_base = "(n_ak8>=1)";
   }
 
-
   // selection on algo
   TString c_algo_wp;
   TString c_jet, c_r;
   
-  if (algo == "sdtau32") { 
-    c_jet = "ak8"; c_r = "0.8";
-    if (wp == "JMAR") { c_algo_wp = "((1-"+c_jet+"_1_tau3/"+c_jet+"_1_tau2)>0.4422)"; }
-  }
-  if (algo == "sdtau32btag") { 
-    c_jet = "ak8"; c_r = "0.8";
-    if (wp == "JMAR") { c_algo_wp = "((1-"+c_jet+"_1_tau3/"+c_jet+"_1_tau2)>0.3973 && max("+c_jet+"_1_sj1_btagCSVV2,"+c_jet+"_1_sj2_btagCSVV2)>0.5426)"; }
-  }
-
-  if (algo == "ecftoptag") { 
-    c_jet = "ca15"; c_r = "1.5";
-    if (wp == "JMAR") { c_algo_wp = "( ca15_1_ecfTopTagBDT>-1. && (0.5+0.5*ca15_1_ecfTopTagBDT)>0.5988)"; }
-  }
-
   if (algo == "sdtau21") { 
     c_jet = "ak8"; c_r = "0.8";
     if (wp == "JMAR") { c_algo_wp = "((1-"+c_jet+"_1_tau2/"+c_jet+"_1_tau1)>0.6514)"; }
-  }
-
-  if (algo == "sdn2") { 
-    c_jet = "ak8"; c_r = "0.8";
-    //    if (wp == "JMAR") { c_algo_wp = "((1-"+c_jet+"_1_n2b1)>0.7339)"; }
-    if (wp == "JMAR") { c_algo_wp = "((1-"+c_jet+"_1_n2b1)>0.7939)"; }
-  }
-
-  if (algo == "sdn2ddt") { 
-    c_jet = "ak8"; c_r = "0.8";
-    if (wp == "JMAR") { c_algo_wp = "((0.5-0.5*"+c_jet+"_1_n2b1ddt)>0.4767)"; }
-  }
-
-  if (algo == "hotvr") { 
-    c_jet = "hotvr"; c_r = "1.5";
-    if (wp == "JMAR") { c_algo_wp = "( hotvr_1_fpt<0.8 && hotvr_1_nsubjets>=3 && hotvr_1_mmin>=50. && (1-hotvr_1_tau32)>0.4504)"; }
-  }
-  
-  if (algo == "best") { 
-    c_jet = "ak8"; c_r = "0.8";
-    if (wp == "JMAR" && object=="T") { c_algo_wp = "("+c_jet+"_1_best_"+(TString)object+"vsQCD>0.9119)"; }
-    if (wp == "JMAR" && object=="W") { c_algo_wp = "("+c_jet+"_1_best_"+(TString)object+"vsQCD>0.8759)"; } 
-    if (wp == "L")    { c_algo_wp = "("+c_jet+"_1_best_"+(TString)object+"vsQCD>0.1883)"; }
-    if (wp == "M")    { c_algo_wp = "("+c_jet+"_1_best_"+(TString)object+"vsQCD>0.8511)"; }
-    if (wp == "T")    { c_algo_wp = "("+c_jet+"_1_best_"+(TString)object+"vsQCD>0.9377)"; }
-    if (wp == "VT")   { c_algo_wp = "("+c_jet+"_1_best_"+(TString)object+"vsQCD>0.9897)"; }
-  }
-
-  if (algo == "imagetop") { 
-    c_jet = "ak8"; c_r = "0.8";
-    if (wp == "JMAR" && object=="T") { c_algo_wp = "("+c_jet+"_1_image_top>0.9669)"; }
-  }
-
-  if (algo == "imagetopmd") { 
-    c_jet = "ak8"; c_r = "0.8";
-    if (wp == "JMAR" && object=="T") { c_algo_wp = "("+c_jet+"_1_image_top>0.9603)"; }
   }
 
   if (algo == "deepak8") { 
@@ -158,9 +107,6 @@ void makeSFTemplates(TString object, TString algo, TString wp, TString ptrange, 
      if (wp == "JMAR" && object=="W") { c_algo_wp = "("+c_jet+"_1_DeepAK8MD_W > "+to_string(WP_Top_rawMD)+")"; }
 
   }
-
-  /////////////////
-
 
   // mass selection
   TString c_mass = "("+c_jet+"_1_mass>50. && "+c_jet+"_1_mass<250.)"; 
@@ -204,6 +150,8 @@ void makeSFTemplates(TString object, TString algo, TString wp, TString ptrange, 
   leg_sample.push_back("unmatched");
   leg_sample.push_back("Data");
 
+  /////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+  
   TString EOSCMS="root://eoscms.cern.ch/";
   //TString path = "/eos/uscms/store/group/lpcjme/noreplica/NanoHRT/Trees/Apr08/muon/";
   TString path; 
@@ -270,7 +218,6 @@ void makeSFTemplates(TString object, TString algo, TString wp, TString ptrange, 
   fout->Close();
   std::cout << "\n\n";
 }
-
 
 void makeHisto(TString name_, TString path_, TString wgt_, std::vector<TString> cuts_, TString c_jet_, TString sys_, TString var_, TFile *f_) {
 
@@ -474,7 +421,7 @@ TH1D *create1Dhisto(TString sample,TTree *tree,TString intLumi,TString cuts,TStr
     else                              { cut ="(xsecWeight*puWeight*genWeight*"+intLumi+")*("+cuts+")"; }
   }
   
-  std::cout << "cut = " << cut << "\n";
+  // std::cout << "cut = " << cut << "\n";
 
   TH1D *hTemp = new TH1D(name,name,bins,xmin,xmax); //hTemp->SetName(name);
   tree->Project(name,branch,cut);

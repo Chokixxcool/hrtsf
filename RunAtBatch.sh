@@ -11,6 +11,6 @@ PTBIN=${4}
 ALGO=${5}
 MISTRATES=${6}
 
-./calcTopWSF_Fikri.sh ${OBJECT} ${YEAR} ${WORKDIR} ${PTBIN} ${ALGO} ${MISTRATES}
+./calcSF.sh ${OBJECT} ${YEAR} ${WORKDIR} ${PTBIN} ${ALGO} ${MISTRATES}
 
 echo "calcTopWSF::Done"

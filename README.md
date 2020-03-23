@@ -8,7 +8,7 @@ Code to calculate SF using templates and combine [PRELIMINARY -- work in progres
 mkdir WTag
 cd WTag
 ```
--> setup combine from here:
+-> setup combine:
 ```
 cmsrel CMSSW_10_2_13
 cd CMSSW_10_2_13/src

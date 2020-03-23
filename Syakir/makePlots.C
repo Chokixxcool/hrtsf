@@ -22,11 +22,8 @@ double median(std::vector<TString> vec);
 TH1F *rescaleXaxis(TH1F *inputhisto, float xmin, float xmax);
 TH1F *getDataMCratio(TGraphAsymmErrors *indata, TH1F *inMC);
 TH1D *create1Dhisto(TString sample, TTree *tree,TString intLumi,TString cuts,TString branch,int bins,float xmin,float xmax, bool useLog,int color, int style,TString name,bool norm,bool data);
-<<<<<<< HEAD
 TGraphAsymmErrors *getSFGraph(TString object, TString algo, TString wp, std::vector<TString> ptrange, int ialgo, int nalgos, int color, TString mistrate, TString path2file);
-=======
 TGraphAsymmErrors *getSFGraph(TString object, TString algo, TString wp, std::vector<TString> ptrange, int ialgo, int nalgos, int color, TString mistrate);
->>>>>>> 47ef1a53d81f08dac344bb33d21cb66794cc45b8
 TGraphAsymmErrors *getSFGraphSyst(TString object, TString algo, TString wp, std::vector<TString> ptrange, int ialgo, int nalgos, int color, TString extra, TGraphAsymmErrors *gr_nom);
 ///////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 TString EOSDIR="/eos/user/s/ssyedoma/JMARWTag/TempFit/plots/";
@@ -40,7 +37,6 @@ void makePlots(TString path2file, TString filename, TString score, TString ptran
   gStyle->SetOptTitle(0);
   TH1::SetDefaultSumw2(kTRUE);
   
-<<<<<<< HEAD
   //// make pre/post fit plots
   // makeDataMCPlotsFromCombine(path2file,filename,score,ptrange,"pass",xmin,xmax,nbins,xaxis,false);
   // makeDataMCPlotsFromCombine(path2file,filename,score,ptrange,"fail",xmin,xmax,nbins,xaxis,false);
@@ -57,7 +53,6 @@ void makePlots(TString path2file, TString filename, TString score, TString ptran
   //// make SF plots
   cout << "running getSFSummarySources . . ." << endl;
   getSFSummarySources(object, wp, path2file, mistrate);
-=======
   // make pre/post fit plots
   // makeDataMCPlotsFromCombine(path2file,filename,score,ptrange,"pass",xmin,xmax,nbins,xaxis,false);
   // makeDataMCPlotsFromCombine(path2file,filename,score,ptrange,"fail",xmin,xmax,nbins,xaxis,false);
@@ -74,7 +69,6 @@ void makePlots(TString path2file, TString filename, TString score, TString ptran
   // make SF plots
   // cout << "running getSFSummarySources . . ." << endl;
   // getSFSummarySources(object, wp, path2file, mistrate);
->>>>>>> 47ef1a53d81f08dac344bb33d21cb66794cc45b8
 }
 
 ///////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
@@ -439,11 +433,8 @@ void getSFSummarySources(TString object, TString wp, TString path2file, TString 
   }
 
   if (object=="W") {
-<<<<<<< HEAD
     // algos.push_back("sdtau21");     legnames.push_back("m_{SD}+#tau_{21}");   colors.push_back(800);
-=======
     algos.push_back("sdtau21");     legnames.push_back("m_{SD}+#tau_{21}");   colors.push_back(800);
->>>>>>> 47ef1a53d81f08dac344bb33d21cb66794cc45b8
     // algos.push_back("sdn2");        legnames.push_back("m_{SD}+N_{2}");       colors.push_back(408);
     // algos.push_back("sdn2ddt");     legnames.push_back("m_{SD}+N_{2}^{DDT}"); colors.push_back(419);
     // algos.push_back("best");        legnames.push_back("BEST");               colors.push_back(882);
@@ -451,13 +442,10 @@ void getSFSummarySources(TString object, TString wp, TString path2file, TString 
     // algos.push_back("deepak8md");   legnames.push_back("DeepAK8-MD");         colors.push_back(616);
     
     ptrange.push_back("low");
-<<<<<<< HEAD
     // ptrange.push_back("lowmed");
     // ptrange.push_back("med");
-=======
     ptrange.push_back("lowmed");
     ptrange.push_back("med");
->>>>>>> 47ef1a53d81f08dac344bb33d21cb66794cc45b8
   }
  
 
@@ -472,11 +460,8 @@ void getSFSummarySources(TString object, TString wp, TString path2file, TString 
   std::vector<TGraphAsymmErrors*> gr_sf_stat;
   for (unsigned int ialgo=0; ialgo<algos.size(); ++ialgo) {
     cout<<"getting SF for "<<algos[ialgo]<<" . . ."<<endl;
-<<<<<<< HEAD
     TGraphAsymmErrors *gr_tot  = getSFGraph(object,algos[ialgo],wp,ptrange,ialgo,algos.size(),colors[ialgo],mistrate,path2file); gr_tot->SetName("gr_tot_"+algos[ialgo]);
-=======
     TGraphAsymmErrors *gr_tot  = getSFGraph(object,algos[ialgo],wp,ptrange,ialgo,algos.size(),colors[ialgo],mistrate); gr_tot->SetName("gr_tot_"+algos[ialgo]);
->>>>>>> 47ef1a53d81f08dac344bb33d21cb66794cc45b8
     // TGraphAsymmErrors *gr_stat = getSFGraphSyst(object,algos[ialgo],wp,ptrange,ialgo,algos.size(),colors[ialgo],"stat",gr_tot); gr_stat->SetName("gr_stat_"+algos[ialgo]);
 
     gr_tot->SetFillColor(colors[ialgo]);  gr_tot->SetFillStyle(3002); gr_tot->SetLineColor(colors[ialgo]); 
@@ -514,14 +499,11 @@ void getSFSummarySources(TString object, TString wp, TString path2file, TString 
   pt_lumi.SetTextSize(0.07);
   pt_lumi.SetTextFont(42);
 
-<<<<<<< HEAD
   TCanvas *c_sf = new TCanvas("c_sf","c_sf",800,800);
   gPad->SetLeftMargin(0.15);
   gPad->SetRightMargin(0.06);
-=======
   TCanvas *c_sf = new TCanvas("c_sf","c_sf",700,500);
   gPad->SetLeftMargin(0.1);
->>>>>>> 47ef1a53d81f08dac344bb33d21cb66794cc45b8
   gPad->SetBottomMargin(0.13);
   gPad->SetTopMargin(1.02);
   //  gPad->SetGridy();
@@ -544,30 +526,24 @@ void getSFSummarySources(TString object, TString wp, TString path2file, TString 
   pt_cms->Draw("sames");
   pt_preliminary->Draw("sames");
   pt_lumi.DrawLatexNDC(0.58,0.93,longstring);
-<<<<<<< HEAD
   c_sf->Print("/eos/user/s/ssyedoma/JMARWTag/TempFit/plots/sf_"+object+"_"+wp+"_"+mistrate+".png");
   c_sf->Print("/eos/user/s/ssyedoma/JMARWTag/TempFit/plots/sf_"+object+"_"+wp+"_"+mistrate+".pdf");
   cout<<"end"<<endl;
 }
 
 TGraphAsymmErrors *getSFGraph(TString object, TString algo, TString wp, std::vector<TString> ptrange, int ialgo, int nalgos, int color, TString mistrate,TString path2file) {
-=======
   c_sf->Print("sf_"+object+"_"+wp+"_"+mistrate+".png");
   cout<<"end"<<endl;
 }
 
 TGraphAsymmErrors *getSFGraph(TString object, TString algo, TString wp, std::vector<TString> ptrange, int ialgo, int nalgos, int color, TString mistrate) {
->>>>>>> 47ef1a53d81f08dac344bb33d21cb66794cc45b8
   
   double xval[20], xvalerr[20];
   double yval[20], yvalerrlo[20], yvalerrhi[20];
   
   for (unsigned int iptrange=0; iptrange<ptrange.size(); ++iptrange) {
-<<<<<<< HEAD
     TFile *fdiag = TFile::Open("./"+path2file+"/sf_fitDiagnostics_"+object+"_"+algo+"_"+wp+"_"+ptrange[iptrange]+".root", "READONLY" );
-=======
     TFile *fdiag = TFile::Open("./"+object+"_"+algo+"_tot/"+mistrate+"/sf_fitDiagnostics_"+object+"_"+algo+"_"+wp+"_"+ptrange[iptrange]+".root", "READONLY" );
->>>>>>> 47ef1a53d81f08dac344bb33d21cb66794cc45b8
     // TFile *fdiag = TFile::Open("./"+path2file+"/sf_fitDiagnostics_"+object+"_"+algo+"_"+wp+"_"+ptrange[iptrange]+".root", "READONLY" );
     TTree *t_   = (TTree*)fdiag->Get("tree_fit_sb");
     TString strCat, strCatLoErr, strCatHiErr;   

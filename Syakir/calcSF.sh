@@ -18,6 +18,13 @@ algos=${5}
 mist_rates=${6}
 syst="tot"
 
+<<<<<<< HEAD
+if [[ ! -f ${workdir0} ]]; 
+then mkdir ${workdir0}
+fi
+
+=======
+>>>>>>> 47ef1a53d81f08dac344bb33d21cb66794cc45b8
 declare -a algos
 declare -a ptranges
 declare -a WPs_mist_rate_0p1
@@ -149,7 +156,13 @@ do
       do
         workdir=${workdir0}"/"${object}"_"${algo}"_"${syst}"_mist_rate_"${mistRate}
         # eosdir="/eos/user/s/ssyedoma/JMARWTag/TempFit/"${workdir}
+<<<<<<< HEAD
+        if [[ ! -f ${workdir} ]]; 
+        then mkdir ${workdir}
+        fi
+=======
         mkdir ${workdir}
+>>>>>>> 47ef1a53d81f08dac344bb33d21cb66794cc45b8
         # mkdir ${eosdir}
 
         ## Loop over the working points ##
@@ -162,6 +175,20 @@ do
             # 1st step ::
             #############################################################
             ## make templates ##
+<<<<<<< HEAD
+            echo " :: make templates "
+            cmdpass=$(echo 'makeSFTemplates.C("'${object}'","'${algo}'","'${wp}'","'${ptrange}'","'${syst}'",true,"'${mistRate}'",'${WP_binarized}','${WP_binarizedMD}','${WP_raw}','${WP_rawMD}','${year}',"'${workdir0}'")')
+            cmdfail=$(echo 'makeSFTemplates.C("'${object}'","'${algo}'","'${wp}'","'${ptrange}'","'${syst}'",false,"'${mistRate}'",'${WP_binarized}','${WP_binarizedMD}','${WP_raw}','${WP_rawMD}','${year}',"'${workdir0}'")')
+            echo "*********** pass ***********"
+            root -l -b -q ${cmdpass}
+            echo "*********** fail ***********"
+            root -l -b -q ${cmdfail}
+            
+            # 2nd step ::
+            #############################################################
+            # cd ${workdir}
+            # inputname=${object}"_"${algo}"_"${wp}"_"${ptrange}
+=======
             # echo " :: make templates "
             # cmdpass=$(echo 'makeSFTemplates.C("'${object}'","'${algo}'","'${wp}'","'${ptrange}'","'${syst}'",true,"'${mistRate}'",'${WP_binarized}','${WP_binarizedMD}','${WP_raw}','${WP_rawMD}','${year}',"'${workdir0}'")')
             # cmdfail=$(echo 'makeSFTemplates.C("'${object}'","'${algo}'","'${wp}'","'${ptrange}'","'${syst}'",false,"'${mistRate}'",'${WP_binarized}','${WP_binarizedMD}','${WP_raw}','${WP_rawMD}','${year}',"'${workdir0}'")')
@@ -174,6 +201,7 @@ do
             #############################################################
             cd ${workdir}
             inputname=${object}"_"${algo}"_"${wp}"_"${ptrange}
+>>>>>>> 47ef1a53d81f08dac344bb33d21cb66794cc45b8
             
             ## make datacard ##
             # echo " :: making datacard . . ."
@@ -211,7 +239,11 @@ do
 
             # rm higgsCombine_paramFit_*  
 
+<<<<<<< HEAD
+            # # make data/mc plots ##          
+=======
             ## make data/mc plots ##          
+>>>>>>> 47ef1a53d81f08dac344bb33d21cb66794cc45b8
             # cd ../../
             
             # cmdmake=$(echo 'makePlots.C("'${workdir}'","'${inputname}'","'${wp}'","'${ptrange}'",'50.','250.','20',"mass","'${object}'","'${wp}'")')
@@ -228,11 +260,19 @@ do
         done
       done
       ## make SF plots ##          
+<<<<<<< HEAD
+      # cd ../../
+      # pwd
+      # wp="JMAR"
+      # cmdmake=$(echo 'makePlots.C("'${workdir}'","'${inputname}'","'${wp}'","'${ptranges}'",'50.','250.','20',"mass","'${object}'","'${wp}'","'${mistRate}'","'${year}'")')
+      # root -l -q -b ${cmdmake}
+=======
       cd ../../
       pwd
       wp="JMAR"
       cmdmake=$(echo 'makePlots.C("'${workdir}'","'${inputname}'","'${wp}'","'${ptranges}'",'50.','250.','20',"mass","'${object}'","'${wp}'","'${mistRate}'","'${year}'")')
       root -l -q -b ${cmdmake}
+>>>>>>> 47ef1a53d81f08dac344bb33d21cb66794cc45b8
       # echo "copying plots_datamc to EOS"
       # mkdir ${eosdir}"/"plots_datamc 
       # cp -r ${workdir}"/"plots_datamc ${eosdir}

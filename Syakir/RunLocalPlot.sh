@@ -1,6 +1,10 @@
 #!/bin/bash
 # source /afs/cern.ch/user/s/ssyedoma/root6.18.sh
 # run this after making SF templates & comment out SF templates production lines in calcSF.sh #
+<<<<<<< HEAD
+
+=======
+>>>>>>> 47ef1a53d81f08dac344bb33d21cb66794cc45b8
 OBJECT=W
 # YEAR=("2016" "2017" "2018")
 # PTBIN=("incl" "low" "lowmed" "med")
@@ -9,7 +13,11 @@ OBJECT=W
 # YEAR=("2016" "2017" "2018")
 YEAR=("2018")
 # YEAR=("2016")
+<<<<<<< HEAD
+PTBIN=("low")
+=======
 PTBIN=("low" "lowmed" "med")
+>>>>>>> 47ef1a53d81f08dac344bb33d21cb66794cc45b8
 ALGO=("deepak8")
 MISTRATE=("0p1")
 
@@ -20,6 +28,23 @@ for year in "${YEAR[@]}";
 	elif [ ${year} == "2018" ]; then workdir="hrtsf_2018";
 	fi
 
+<<<<<<< HEAD
+	for ptbin in "${PTBIN[@]}";
+		do
+
+		for algo in "${ALGO[@]}";
+			do
+
+			for mistrate in "${MISTRATE[@]}";
+			do
+			# ./calcSF.sh ${OBJECT} ${year} ${workdir} ${PTBIN} ${ALGO} ${mistrate}
+			./calcSF2.sh ${OBJECT} ${year} ${workdir} ${PTBIN} ${ALGO} ${mistrate}
+			done
+		done
+	done
+done
+
+=======
 	# for ptbin in "${PTBIN[@]}";
 	# 	do
 
@@ -33,3 +58,4 @@ for year in "${YEAR[@]}";
 		# done
 	# done
 done
+>>>>>>> 47ef1a53d81f08dac344bb33d21cb66794cc45b8

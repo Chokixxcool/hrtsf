@@ -191,7 +191,11 @@ void makeSFTemplates(TString object, TString algo, TString wp, TString ptrange, 
   //TString c_p1 = "(!("+c_p3+" || "+c_p2+"))";
 
   // final set of cuts
+<<<<<<< HEAD
+  TString cut = c_base+" && "+c_algo_wp+" && "+c_mass+" && "+c_ptrange;  std::cout << cut << "\n";
+=======
   TString cut = c_base+" && "+c_algo_wp+" && "+c_mass+" && "+c_ptrange; std::cout << cut << "\n";
+>>>>>>> 47ef1a53d81f08dac344bb33d21cb66794cc45b8
   std::vector<TString> cuts; cuts.clear();
   cuts.push_back(cut);
   cuts.push_back(cut+" && "+c_p3);
@@ -474,7 +478,11 @@ TH1D *create1Dhisto(TString sample,TTree *tree,TString intLumi,TString cuts,TStr
     else                              { cut ="(xsecWeight*puWeight*genWeight*"+intLumi+")*("+cuts+")"; }
   }
   
+<<<<<<< HEAD
+  // std::cout << "cut = " << cut << "\n";
+=======
   std::cout << "cut = " << cut << "\n";
+>>>>>>> 47ef1a53d81f08dac344bb33d21cb66794cc45b8
 
   TH1D *hTemp = new TH1D(name,name,bins,xmin,xmax); //hTemp->SetName(name);
   tree->Project(name,branch,cut);

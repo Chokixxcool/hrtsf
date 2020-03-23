@@ -1,0 +1,15 @@
+ :: make templates 
+*********** pass ***********
+
+Processing makeSFTemplates.C("W","sdtau21","JMAR","med","tot",true,"0p1",0.997201,0.952358,0.894613,0.71532,2018,"hrtsf_2018")...
+(n_ak8>=1) && (((1-ak8_1_tau2/ak8_1_tau1)>0.6514)) && (ak8_1_mass>50. && ak8_1_mass<250.) && (ak8_1_pt>400. && ak8_1_pt<=800.)
+path: root://eoscms.cern.ch//eos/cms/store/group/phys_jetmet/nbinnorj/WTopTagging/ntuples_HRTSF/3Oct_For_Copy/
+14062 18080.7 overall norm = 0.777733
+0.777733
+
+
+*********** fail ***********
+
+Processing makeSFTemplates.C("W","sdtau21","JMAR","med","tot",false,"0p1",0.997201,0.952358,0.894613,0.71532,2018,"hrtsf_2018")...
+(n_ak8>=1) && !(((1-ak8_1_tau2/ak8_1_tau1)>0.6514)) && (ak8_1_mass>50. && ak8_1_mass<250.) && (ak8_1_pt>400. && ak8_1_pt<=800.)
+path: root://eoscms.cern.ch//eos/cms/store/group/phys_jetmet/nbinnorj/WTopTagging/ntuples_HRTSF/3Oct_For_Copy/

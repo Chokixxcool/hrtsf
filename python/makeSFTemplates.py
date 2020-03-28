@@ -1,96 +1,54 @@
 import ROOT,glob,os
 import array
+import numpy as np
 
 def makeSFTemplates(obj, algo, wp, ptrange, syst, Pass, mistRate, WP_Top_binarized, WP_Top_binarizedMD, WP_Top_raw, WP_Top_rawMD, year, workdir) :
 
   if Pass: passstr = "pass"
   else: passstr = "fail"
-  name = obj+"_"+algo+"_"+wp+"_"+ptrange+"_"+passstr
-
-  ROOT.setTDRStyle()
-  gROOT.SetBatch(True)
-  gStyle.SetOptStat(0)
-  gStyle.SetOptFit(1)
-  gStyle.SetPalette(1)
-  SetDefaultSumw2(kTrue)
-
-  if year == 2016: intLumi = 36.8
-  elif year == 2017: intLumi = 41.53
-  elif year == 2018: intLumi = 59.74
+  name = year+"_"+obj+"_"+algo+"_"+wp+"_"+ptrange+"_"+mistRate+"_"+passstr
   
-  tmpLumi=intLumi
-  lumi = str(tmpLumi)
+  ROOT.gROOT.SetBatch(True)
+  ROOT.gROOT.LoadMacro("setTDRStyle.h")
+  ROOT.gStyle.SetOptStat(0)
+  ROOT.gStyle.SetOptFit(1)
+  ROOT.gStyle.SetPalette(1)
+  ROOT.TH1.SetDefaultSumw2()
+
+  if year == "2016": intLumi = "36.8"
+  elif year == "2017": intLumi = "41.53"
+  elif year == "2018": intLumi = "59.74"
+  
+  lumi=intLumi
 
   ## baseline selection
-  if year == 2016: c_base = "(n_ak8>=1 && n_ca15>=1)"
-  elif year == 2017 or year == 2018: c_base = "(n_ak8>=1)"
+  if year == "2016": c_base = "(n_ak8>=1 && n_ca15>=1)"
+  elif year == "2017" or year == "2018": c_base = "(n_ak8>=1)"
   
   ## selection on algo
-  if algo == "sdtau32": 
-    c_jet = "ak8"; c_r = "0.8"
-    if (wp == "JMAR") : c_algo_wp = "((1-"+c_jet+"_1_tau3/"+c_jet+"_1_tau2)>0.4422)"
-
-  elif (algo == "sdtau32btag") : 
-    c_jet = "ak8"; c_r = "0.8"
-    if (wp == "JMAR") : c_algo_wp = "((1-"+c_jet+"_1_tau3/"+c_jet+"_1_tau2)>0.3973 && max("+c_jet+"_1_sj1_btagCSVV2,"+c_jet+"_1_sj2_btagCSVV2)>0.5426)"
-
-  elif (algo == "ecftoptag") : 
-    c_jet = "ca15"; c_r = "1.5"
-    if (wp == "JMAR") : c_algo_wp = "( ca15_1_ecfTopTagBDT>-1. && (0.5+0.5*ca15_1_ecfTopTagBDT)>0.5988)"
-
-  elif (algo == "sdtau21") : 
+  if (algo == "sdtau21") : 
     c_jet = "ak8"; c_r = "0.8"
     if (wp == "JMAR") : c_algo_wp = "((1-"+c_jet+"_1_tau2/"+c_jet+"_1_tau1)>0.6514)"
-
-  elif (algo == "sdn2") : 
-    c_jet = "ak8"; c_r = "0.8"
-    ##    if (wp == "JMAR") : c_algo_wp = "((1-"+c_jet+"_1_n2b1)>0.7339)"
-    if (wp == "JMAR") : c_algo_wp = "((1-"+c_jet+"_1_n2b1)>0.7939)"
-
-  elif (algo == "sdn2ddt") : 
-    c_jet = "ak8"; c_r = "0.8"
-    if (wp == "JMAR") : c_algo_wp = "((0.5-0.5*"+c_jet+"_1_n2b1ddt)>0.4767)"
-
-  elif (algo == "hotvr") : 
-    c_jet = "hotvr"; c_r = "1.5"
-    if (wp == "JMAR") : c_algo_wp = "( hotvr_1_fpt<0.8 && hotvr_1_nsubjets>=3 && hotvr_1_mmin>=50. && (1-hotvr_1_tau32)>0.4504)"
-  
-  elif (algo == "best") : 
-    c_jet = "ak8"; c_r = "0.8"
-    if (wp == "JMAR" and obj=="T") : c_algo_wp = "("+c_jet+"_1_best_"+"("+obj+"vsQCD>0.9119)"
-    elif (wp == "JMAR" and obj=="W") : c_algo_wp = "("+c_jet+"_1_best_"+"("+obj+"vsQCD>0.8759)"
-    elif (wp == "L")    : c_algo_wp = "("+c_jet+"_1_best_"+"("+obj+"vsQCD>0.1883)" 
-    elif (wp == "M")    : c_algo_wp = "("+c_jet+"_1_best_"+"("+obj+"vsQCD>0.8511)" 
-    elif (wp == "T")    : c_algo_wp = "("+c_jet+"_1_best_"+"("+obj+"vsQCD>0.9377)" 
-    elif (wp == "VT")   : c_algo_wp = "("+c_jet+"_1_best_"+"("+obj+"vsQCD>0.9897)"
-
-  elif (algo == "imagetop") : 
-    c_jet = "ak8"; c_r = "0.8"
-    if (wp == "JMAR" and obj=="T") : c_algo_wp = "("+c_jet+"_1_image_top>0.9669)"
-
-  elif (algo == "imagetopmd") : 
-    c_jet = "ak8"; c_r = "0.8"
-    if (wp == "JMAR" and obj=="T") : c_algo_wp = "("+c_jet+"_1_image_top>0.9603)"
 
   elif (algo == "deepak8") : 
     c_jet = "ak8"; c_r = "0.8"
     # if (wp == "JMAR" and obj=="T") : c_algo_wp = "("+c_jet+"_1_DeepAK8_"+(obj+"vsQCD>0.852861)"
     if (wp == "JMAR" and obj=="T") : c_algo_wp = "("+c_jet+"_1_DeepAK8_"+"("+obj+"vsQCD>"+str(WP_Top_binarized)+")"
-    elif (wp == "JMAR" and obj=="W") : c_algo_wp = "("+c_jet+"_1_DeepAK8_"+"(+"obj+"vsQCD>"+str(WP_Top_binarized)+")" 
-    elif (wp == "L")    : c_algo_wp = "("+c_jet+"_1_DeepAK8_"+"("+obj+"vsQCD>0.1883)" 
-    elif (wp == "M")    : c_algo_wp = "("+c_jet+"_1_DeepAK8_"+"("+obj+"vsQCD>0.8511)" 
-    elif (wp == "T")    : c_algo_wp = "("+c_jet+"_1_DeepAK8_"+"("+obj+"vsQCD>0.9377)" 
-    elif (wp == "VT")   : c_algo_wp = "("+c_jet+"_1_DeepAK8_"+"("+obj+"vsQCD>0.9897)" 
+    elif (wp == "JMAR" and obj=="W") : c_algo_wp = "("+c_jet+"_1_DeepAK8_"+obj+"vsQCD>"+str(WP_Top_binarized)+")" 
+    elif (wp == "L")    : c_algo_wp = "("+c_jet+"_1_DeepAK8_"+obj+"vsQCD>0.1883)" 
+    elif (wp == "M")    : c_algo_wp = "("+c_jet+"_1_DeepAK8_"+obj+"vsQCD>0.8511)" 
+    elif (wp == "T")    : c_algo_wp = "("+c_jet+"_1_DeepAK8_"+obj+"vsQCD>0.9377)" 
+    elif (wp == "VT")   : c_algo_wp = "("+c_jet+"_1_DeepAK8_"+obj+"vsQCD>0.9897)" 
 
   elif (algo == "deepak8md") :
     c_jet = "ak8"; c_r = "0.8"
     # if (wp == "JMAR" and obj=="T") : c_algo_wp = "("+c_jet+"_1_DeepAK8MD_"+(obj+"vsQCD>0.436951)"
-    if (wp == "JMAR" and obj=="T") : c_algo_wp = "("+c_jet+"_1_DeepAK8MD_"+"("+obj+"vsQCD>"+str(WP_Top_binarizedMD)+")"
-    elif (wp == "JMAR" and obj=="W") : c_algo_wp = "("+c_jet+"_1_DeepAK8MD_"+"("+obj+"vsQCD>"+str(WP_Top_binarizedMD)+")"
-    elif (wp == "L")    : c_algo_wp = "("+c_jet+"_1_DeepAK8MD_"+"("+obj+"vsQCD>0.1883)"
-    elif (wp == "M")    : c_algo_wp = "("+c_jet+"_1_DeepAK8MD_"+"("+obj+"vsQCD>0.8511)"
-    elif (wp == "T")    : c_algo_wp = "("+c_jet+"_1_DeepAK8MD_"+"("+obj+"vsQCD>0.9377)"
-    elif (wp == "VT")   : c_algo_wp = "("+c_jet+"_1_DeepAK8MD_"+"("+obj+"vsQCD>0.9897)"
+    if (wp == "JMAR" and obj=="T") : c_algo_wp = "("+c_jet+"_1_DeepAK8MD_"+"("+obj+"vsQCD>"+str(WP_Top_binarizedMD)+"))"
+    elif (wp == "JMAR" and obj=="W") : c_algo_wp = "("+c_jet+"_1_DeepAK8MD_"+"("+obj+"vsQCD>"+str(WP_Top_binarizedMD)+"))"
+    elif (wp == "L")    : c_algo_wp = "("+c_jet+"_1_DeepAK8MD_"+"("+obj+"vsQCD>0.1883))"
+    elif (wp == "M")    : c_algo_wp = "("+c_jet+"_1_DeepAK8MD_"+"("+obj+"vsQCD>0.8511))"
+    elif (wp == "T")    : c_algo_wp = "("+c_jet+"_1_DeepAK8MD_"+"("+obj+"vsQCD>0.9377))"
+    elif (wp == "VT")   : c_algo_wp = "("+c_jet+"_1_DeepAK8MD_"+"("+obj+"vsQCD>0.9897))"
 
   elif (algo == "deepak8_raw"):
      c_jet = "ak8"; c_r = "0.8"
@@ -149,15 +107,15 @@ def makeSFTemplates(obj, algo, wp, ptrange, syst, Pass, mistRate, WP_Top_binariz
 
   EOSCMS="root://eoscms.cern.ch/"
   # path = "/eos/uscms/store/group/lpcjme/noreplica/NanoHRT/Trees/Apr08/muon/"
-  if year==2016:
+  if year=="2016":
       path = EOSCMS
       path += "/eos/cms/store/group/phys_jetmet/nbinnorj/WTopTagging/ntuples_HRTSF/2016/"
  
-  elif year==2017:
+  elif year=="2017":
       path = EOSCMS
       path += "/eos/cms/store/group/phys_jetmet/nbinnorj/WTopTagging/ntuples_HRTSF/29July/"
    
-  elif year==2018:
+  elif year=="2018":
       # path = "/eos/uscms/store/user/pakontax/2018_Samples_From_Sicheng_For_Copy_V2/"
       path = EOSCMS
       path += "/eos/cms/store/group/phys_jetmet/nbinnorj/WTopTagging/ntuples_HRTSF/3Oct_For_Copy/"
@@ -175,7 +133,7 @@ def makeSFTemplates(obj, algo, wp, ptrange, syst, Pass, mistRate, WP_Top_binariz
   h_data_incl = create1Dhisto(name,t_data,lumi,cut_incl,c_jet+"_1_mass",20,50.,250.,False,1,1,"h_"+name+"_data_incl",False,True) 
   h_data_incl.SetFillColor(0)
   scalemc2data = h_data_incl.Integral()/h_mc_incl.Integral() 
-  print h_data_incl.Integral() + " " + h_mc_incl.Integral() + " overall norm = " + scalemc2data + "\n"
+  print str(h_data_incl.Integral()) + " " + str(h_mc_incl.Integral()) + " overall norm = " + str(scalemc2data) + "\n"
   tmpscalemc2data = scalemc2data
   scalemc2datastr = str(tmpscalemc2data) 
   print scalemc2datastr + "\n"
@@ -188,14 +146,13 @@ def makeSFTemplates(obj, algo, wp, ptrange, syst, Pass, mistRate, WP_Top_binariz
   h_data.SetLineWidth(1)
 
   # make dir
-  dirname1 = workdir+"/"+obj+"_"+algo+"_"+syst+"_mist_rate_"+mistRate
-  dir_err = os.system("mkdir -p ./"+dirname1)
-  if (-1 == dir_err) : 
-    print "Error creating directory!\n"
-    exit(1)
+  # dirname1 = workdir+"/"+obj+"_"+algo+"_"+syst+"_mist_rate_"+mistRate
+  # dir_err = os.system("mkdir -p ./"+dirname1)
+  # if (-1 == dir_err) : 
+  #   print "Error creating directory!\n"
+  #   exit(1)
 
-  nameoutfile = name+".root" 
-  fout = ROOT.TFile("./"+dirname1+"/"+nameoutfile,"RECREATE")
+  fout = ROOT.TFile(workdir+"/"+name+".root","RECREATE")
   h_data.Write("data_obs")
 
   makeHisto(name, path,lumi+"*"+scalemc2datastr,cuts,c_jet,"nom","nom",fout)
@@ -331,9 +288,6 @@ def makeHistoLHEPDF(name_, path_, wgt_, cuts_, c_jet_, sys_, var_, f_) :
   f_mc_ = ROOT.TFile.Open(path_+"/mc_sys/LHEWeight/sm_tree.root","READONLY")
   t_mc_ = f_mc_.Get("Events")
 
-  # h_p3_v.clear()
-  # h_p2_v.clear()
-  # h_p1_v.clear()
   h_p3_v=[]
   h_p2_v=[]
   h_p1_v=[]
@@ -353,7 +307,7 @@ def makeHistoLHEPDF(name_, path_, wgt_, cuts_, c_jet_, sys_, var_, f_) :
     mean_p3_  = 0.; mean_p2_  = 0.; mean_p1_  = 0. 
     rms_p3_   = 0.; rms_p2_   = 0.; rms_p1_   = 0.
     sigma_p3_ = 0.; sigma_p2_ = 0.; sigma_p1_ = 0.
-    for ihisto in range(0,h_p3_v.size()):
+    for ihisto in range(0,len(h_p3_v)):
       mean_p3_ += h_p3_v[ihisto].GetBinContent(ibin)                                         
       rms_p3_  += (h_p3_v[ihisto].GetBinContent(ibin))*(h_p3_v[ihisto].GetBinContent(ibin)) 
       mean_p2_ += h_p2_v[ihisto].GetBinContent(ibin)                                         
@@ -361,9 +315,9 @@ def makeHistoLHEPDF(name_, path_, wgt_, cuts_, c_jet_, sys_, var_, f_) :
       mean_p1_ += h_p1_v[ihisto].GetBinContent(ibin)                                         
       rms_p1_  += (h_p1_v[ihisto].GetBinContent(ibin))*(h_p1_v[ihisto].GetBinContent(ibin)) 
    
-    mean_p3_ = mean_p3_/h_p3_v.size(); rms_p3_ = sqrt(rms_p3_/h_p3_v.size()); sigma_p3_ = sqrt((rms_p3_*rms_p3_) - (mean_p3_*mean_p3_)) 
-    mean_p2_ = mean_p2_/h_p2_v.size(); rms_p2_ = sqrt(rms_p2_/h_p2_v.size()); sigma_p2_ = sqrt((rms_p2_*rms_p2_) - (mean_p2_*mean_p2_)) 
-    mean_p1_ = mean_p1_/h_p1_v.size(); rms_p1_ = sqrt(rms_p1_/h_p1_v.size()); sigma_p1_ = sqrt((rms_p1_*rms_p1_) - (mean_p1_*mean_p1_)) 
+    mean_p3_ = mean_p3_/len(h_p3_v); rms_p3_ = np.sqrt(rms_p3_/len(h_p3_v)); sigma_p3_ = np.sqrt((rms_p3_*rms_p3_) - (mean_p3_*mean_p3_)) 
+    mean_p2_ = mean_p2_/len(h_p2_v); rms_p2_ = np.sqrt(rms_p2_/len(h_p2_v)); sigma_p2_ = np.sqrt((rms_p2_*rms_p2_) - (mean_p2_*mean_p2_)) 
+    mean_p1_ = mean_p1_/len(h_p1_v); rms_p1_ = np.sqrt(rms_p1_/len(h_p1_v)); sigma_p1_ = np.sqrt((rms_p1_*rms_p1_) - (mean_p1_*mean_p1_)) 
 
     h_p3_up.SetBinContent(ibin,h_p3_up.GetBinContent(ibin)+sigma_p3_); h_p3_down.SetBinContent(ibin,h_p3_down.GetBinContent(ibin)-sigma_p3_)
     h_p2_up.SetBinContent(ibin,h_p2_up.GetBinContent(ibin)+sigma_p2_); h_p2_down.SetBinContent(ibin,h_p2_down.GetBinContent(ibin)-sigma_p2_)
@@ -397,15 +351,13 @@ def makeHistoLHEPDF(name_, path_, wgt_, cuts_, c_jet_, sys_, var_, f_) :
   h_p1_down.Write("catp1_"+sys_+"Down")
 
 def create1Dhisto(sample,tree,intLumi,cuts,branch,bins,xmin,xmax, useLog, color, style,name,norm,data) :
-  TH1.SetDefaultSumw2(kTrue)
-
-  ##  if (data) : cut ="(passMuTrig && "+cuts+")" 
+  ROOT.TH1.SetDefaultSumw2()
   if (data) : cut ="("+cuts+")" 
   else :
-    if      (name.Contains("puUp"))   : cut ="(xsecWeight*puWeightUp*genWeight*"+intLumi+")*("+cuts+")"
-    elif (name.Contains("puDown")) : cut ="(xsecWeight*puWeightDown*genWeight*"+intLumi+")*("+cuts+")"
-    # elif (name.Contains("herw"))   : cut ="(xsecWeight*puWeight*"+intLumi+")*("+cuts+")"
-    else                              : cut ="(xsecWeight*puWeight*genWeight*"+intLumi+")*("+cuts+")"
+    if      "puUp" in name : cut = "(xsecWeight*puWeightUp*genWeight*"+intLumi+")*("+cuts+")"
+    elif  "puDown" in name : cut = "(xsecWeight*puWeightDown*genWeight*"+intLumi+")*("+cuts+")"
+    # elif    "herw" in name : cut = "(xsecWeight*puWeight*"+intLumi+")*("+cuts+")"
+    else                   : cut ="(xsecWeight*puWeight*genWeight*"+intLumi+")*("+cuts+")"
  
   
   print "cut = " + cut + "\n"
@@ -420,7 +372,7 @@ def create1Dhisto(sample,tree,intLumi,cuts,branch,bins,xmin,xmax, useLog, color,
   hTemp.SetLineStyle(style)
 
   # ad overflow bin             
-  error =0.; integral = hTemp.IntegralAndError(bins,bins+1,error)
+  error =0.; integral = hTemp.IntegralAndError(bins,bins+1,ROOT.Double(error))
   hTemp.SetBinContent(bins,integral)
   hTemp.SetBinError(bins,error)
 

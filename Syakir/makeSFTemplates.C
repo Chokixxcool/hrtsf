@@ -25,7 +25,7 @@ void setTDRStyle();
 void makeSFTemplates(TString object, TString algo, TString wp, TString ptrange, TString syst, bool pass, TString mistRate, float WP_Top_binarized, float WP_Top_binarizedMD, float WP_Top_raw, float WP_Top_rawMD, int year, TString workdir) {
 
   TString passstr = "pass"; if (pass) { passstr = "pass"; } else { passstr = "fail"; }
-  TString name = object+"_"+algo+"_"+wp+"_"+ptrange+"_"+passstr;
+  TString name = to_string(year)+"_"+object+"_"+algo+"_"+wp+"_"+ptrange+"_"+mistRate+"_"+passstr;
 
   setTDRStyle();
   gROOT->SetBatch(true);
@@ -192,7 +192,6 @@ void makeSFTemplates(TString object, TString algo, TString wp, TString ptrange, 
 
   // final set of cuts
   TString cut = c_base+" && "+c_algo_wp+" && "+c_mass+" && "+c_ptrange;  std::cout << cut << "\n";
-  TString cut = c_base+" && "+c_algo_wp+" && "+c_mass+" && "+c_ptrange; std::cout << cut << "\n";
   std::vector<TString> cuts; cuts.clear();
   cuts.push_back(cut);
   cuts.push_back(cut+" && "+c_p3);
@@ -242,12 +241,11 @@ void makeSFTemplates(TString object, TString algo, TString wp, TString ptrange, 
   h_data->SetLineWidth(1);
 
   // make dir
-  TString dirname1 = workdir+"/"+object+"_"+algo+"_"+syst+"_mist_rate_"+mistRate;
-  const int dir_err = system("mkdir -p ./"+dirname1);
-  if (-1 == dir_err) { printf("Error creating directory!n"); exit(1); }
+  // TString dirname1 = workdir+"/"+object+"_"+algo+"_"+syst+"_mist_rate_"+mistRate;
+  // const int dir_err = system("mkdir -p ./"+dirname1);
+  // if (-1 == dir_err) { printf("Error creating directory!n"); exit(1); }
 
-  TString nameoutfile = name+".root"; 
-  TFile *fout = new TFile("./"+dirname1+"/"+nameoutfile,"RECREATE");
+  TFile *fout = new TFile(workdir+"/"+name+".root","RECREATE");
   h_data->Write("data_obs");
 
   makeHisto(name, path,lumi+"*"+scalemc2datastr,cuts,c_jet,"nom","nom",fout);

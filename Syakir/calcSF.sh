@@ -10,6 +10,8 @@
 # algos :: W: {deepak8, sdtau21}, T: {deepak8, sdtau32}
 # mist_rates :: {0p1, 0p5, 1p0, 5p0}
 
+TEMPDIR="/eos/user/s/ssyedoma/JMARWTag/TempFit/SFtemplates"
+
 objects=${1}
 years=${2}
 workdir0=${3}
@@ -18,9 +20,9 @@ algos=${5}
 mist_rates=${6}
 syst="tot"
 
-if [[ ! -f ${workdir0} ]]; 
-then mkdir ${workdir0}
-fi
+# if [[ ! -f ${workdir0} ]]; 
+# then mkdir ${workdir0}
+# fi
 
 declare -a algos
 declare -a ptranges
@@ -151,14 +153,8 @@ do
       ## Loop over algos ##
       for algo in "${algos[@]}";
       do
-        workdir=${workdir0}"/"${object}"_"${algo}"_"${syst}"_mist_rate_"${mistRate}
-        # eosdir="/eos/user/s/ssyedoma/JMARWTag/TempFit/"${workdir}
-        if [[ ! -f ${workdir} ]]; 
-        then mkdir ${workdir}
-        fi
-        mkdir ${workdir}
-        # mkdir ${eosdir}
-
+        workdir=${year}"_"${object}"_"${algo}"_"${syst}"_mist_rate_"${mistRate}
+        
         ## Loop over the working points ##
         for wp in "JMAR"
         do  
@@ -170,24 +166,12 @@ do
             #############################################################
             ## make templates ##
             echo " :: make templates "
-            cmdpass=$(echo 'makeSFTemplates.C("'${object}'","'${algo}'","'${wp}'","'${ptrange}'","'${syst}'",true,"'${mistRate}'",'${WP_binarized}','${WP_binarizedMD}','${WP_raw}','${WP_rawMD}','${year}',"'${workdir0}'")')
-            cmdfail=$(echo 'makeSFTemplates.C("'${object}'","'${algo}'","'${wp}'","'${ptrange}'","'${syst}'",false,"'${mistRate}'",'${WP_binarized}','${WP_binarizedMD}','${WP_raw}','${WP_rawMD}','${year}',"'${workdir0}'")')
+            cmdpass=$(echo 'makeSFTemplates.C("'${object}'","'${algo}'","'${wp}'","'${ptrange}'","'${syst}'",true,"'${mistRate}'",'${WP_binarized}','${WP_binarizedMD}','${WP_raw}','${WP_rawMD}','${year}',"'${TEMPDIR}'")')
+            cmdfail=$(echo 'makeSFTemplates.C("'${object}'","'${algo}'","'${wp}'","'${ptrange}'","'${syst}'",false,"'${mistRate}'",'${WP_binarized}','${WP_binarizedMD}','${WP_raw}','${WP_rawMD}','${year}',"'${TEMPDIR}'")')
             echo "*********** pass ***********"
             root -l -b -q ${cmdpass}
             echo "*********** fail ***********"
             root -l -b -q ${cmdfail}
-            
-            # 2nd step ::
-            #############################################################
-            # cd ${workdir}
-            # inputname=${object}"_"${algo}"_"${wp}"_"${ptrange}
-            # echo " :: make templates "
-            # cmdpass=$(echo 'makeSFTemplates.C("'${object}'","'${algo}'","'${wp}'","'${ptrange}'","'${syst}'",true,"'${mistRate}'",'${WP_binarized}','${WP_binarizedMD}','${WP_raw}','${WP_rawMD}','${year}',"'${workdir0}'")')
-            # cmdfail=$(echo 'makeSFTemplates.C("'${object}'","'${algo}'","'${wp}'","'${ptrange}'","'${syst}'",false,"'${mistRate}'",'${WP_binarized}','${WP_binarizedMD}','${WP_raw}','${WP_rawMD}','${year}',"'${workdir0}'")')
-            # echo "*********** pass ***********"
-            # root -l -b -q ${cmdpass}
-            # echo "*********** fail ***********"
-            # root -l -b -q ${cmdfail}
             
             # 2nd step ::
             #############################################################

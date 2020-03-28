@@ -1,11 +1,25 @@
 import ROOT, os, glob
+from makePlots import *
 
 INDIR="/eos/user/s/ssyedoma/JMARWTag/TempFit/plots/"
+
+EOSUSER="root://eosuser.cern.ch/"
+USER="s/ssyedoma"
+TEMPDIR="/eos/user/"+USER+"/JMARWTag/TempFit/SFtemplates"
+DCDIR="/eos/user/"+USER+"/JMARWTag/TempFit/SFdatacards"
+FDDIR="/eos/user/"+USER+"/JMARWTag/TempFit/SFfitdiags"
+PLTDIR="/eos/user/"+USER+"/JMARWTag/TempFit/Plots"
+
 years=["2018"]
 wp=["0p1","0p5","1p0","5p0"]
 taggers=["sdtau21","deepak8"]
 
-def main():
+def main2():
+	for year in years:
+		for mistrate in ["0p1"]:
+			getSFSummarySources(year, "W", "JMAR", FDDIR, mistrate, PLTDIR)
+
+def main1():
 	for year in years:
 		h_sf,h_data,h_mc=[],[],[]
 		c_mistag=ROOT.TCanvas("","",800,800)
@@ -62,4 +76,5 @@ def dummy(xname="xaxis",yname="yaxis", ymin=0, ymax=1.4):
   return dummy
 
 if __name__ == '__main__':
- 	main()
+ 	# main1()
+ 	main2()

@@ -11,7 +11,7 @@ OBJECT=W
 YEAR=("2018")
 # YEAR=("2016")
 PTBIN=("low")
-PTBIN=("low" "lowmed" "med")
+# PTBIN=("low" "lowmed" "med")
 ALGO=("deepak8")
 MISTRATE=("0p1")
 
@@ -30,23 +30,9 @@ for year in "${YEAR[@]}";
 
 			for mistrate in "${MISTRATE[@]}";
 			do
-			# ./calcSF.sh ${OBJECT} ${year} ${workdir} ${PTBIN} ${ALGO} ${mistrate}
-			./calcSF2.sh ${OBJECT} ${year} ${workdir} ${PTBIN} ${ALGO} ${mistrate}
+			./calcSF.sh ${OBJECT} ${year} ${workdir} ${PTBIN} ${ALGO} ${mistrate}
+			# ./calcSF2.sh ${OBJECT} ${year} ${workdir} ${PTBIN} ${ALGO} ${mistrate}
 			done
 		done
 	done
-done
-
-	# for ptbin in "${PTBIN[@]}";
-	# 	do
-
-	# 	for algo in "${ALGO[@]}";
-	# 		do
-
-			for mistrate in "${MISTRATE[@]}";
-			do
-			./calcSF.sh ${OBJECT} ${year} ${workdir} ${PTBIN} ${ALGO} ${mistrate}
-			done
-		# done
-	# done
 done
